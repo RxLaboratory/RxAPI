@@ -136,7 +136,7 @@
                 // Look for the latest version for the same os
                 while ($v = $rep->fetch())
                 {
-                    $appId = $v['id'];
+                    $appId = (int)$v['id'];
                     // First, check os
                     if (!checkOS( $os, $v['os'])) continue;
                     // Check host
@@ -176,13 +176,13 @@
                             :host,
                             :hostVersion
                         );");
-                    $rep->bindValue(':id', $appId, PDO::PARAM_STR);
-                    $rep->bindValue(':name', $name, PDO::PARAM_STR);
-                    $rep->bindValue(':version', $version, PDO::PARAM_STR);
-                    $rep->bindValue(':os', $os, PDO::PARAM_STR);
-                    $rep->bindValue(':osVersion', $osVersion, PDO::PARAM_STR);
-                    $rep->bindValue(':host', $host, PDO::PARAM_STR);
-                    $rep->bindValue(':hostVersion', $hostVersion, PDO::PARAM_STR);
+                    $rep->bindValue(':id', $appId, PDO::PARAM_INT);
+                    $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
+                    $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
+                    $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
+                    $rep->bindValue(':osVersion', trim($osVersion, PDO::PARAM_STR);
+                    $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
+                    $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
                     $rep->execute();
                     $rep->closeCursor();
                 }
