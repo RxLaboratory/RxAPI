@@ -13,7 +13,7 @@ The software which needs to check for update just have to use a *GET* query, pro
 
 ### Query
 
-`http://your.server/rxversion/?getUpdate&name=Duik&version=17.0.0&os=win&osVersion=10&host=After Effects 2021&hostVersion=18.4`
+`http://your.server/rxversion/?getVersion&name=Duik&version=17.0.0&os=win&osVersion=10&host=After Effects 2021&hostVersion=18.4`
 
 - ***getUpdate***: This arg is needed to get a version
 - ***name***: The name of the software
