@@ -180,7 +180,7 @@
                     $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
                     $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
                     $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
-                    $rep->bindValue(':osVersion', trim($osVersion, PDO::PARAM_STR);
+                    $rep->bindValue(':osVersion', trim($osVersion), PDO::PARAM_STR);
                     $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
                     $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
                     $rep->execute();
