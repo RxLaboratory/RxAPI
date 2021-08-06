@@ -123,7 +123,7 @@
                 WHERE {$appsTable}.`name` = :name
                 ORDER BY `date` DESC;"
                 );
-            echo($name);
+
             $rep->bindValue(':name', $name, PDO::PARAM_STR);
             $ok = sqlRequest( $rep, "Successful request." );
 
