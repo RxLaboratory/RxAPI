@@ -5,7 +5,7 @@ Make it light, easy and simple.
 
 This is a very simple PHP+SQL server to allow scripts, add-ons, applications, etc. to check for updates.
 
-The info is stored in an SQL server; the server does provide any way to set the update information yet, one has to manually populate the SQL database using tools like phpMyAdmin.
+The info is stored in an SQL server; the server doesn't provide any way to set the update information yet, one has to manually populate the SQL database using tools like phpMyAdmin.
 
 The software which needs to check for update just have to use a *GET* query, providing its own name and version; the server replies with the update information, a download link, etc.
 
