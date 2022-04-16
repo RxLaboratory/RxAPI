@@ -1,10 +1,10 @@
 <?php
-    /*
+/*
 		RxVersion
         
         This program is licensed under the GNU General Public License.
 
-        Copyright (C) 20202-2021 Nicolas Dufresne and Contributors.
+        Copyright (C) 2020-2022 Nicolas Dufresne and Contributors.
 
         This program is free software;
         you can redistribute it and/or modify it
@@ -21,29 +21,38 @@
         If not, see http://www.gnu.org/licenses/.
 	*/
 
-    // Edit this configuration file before running the install script at /install/index.php
+    //configuration and init 
+	include ("../config.php");
+    include ("functions.php");
+    include ("../init.php");
+    
+    //prepare reply
+	include ("reply.php");
 
-	// === DEV MODE ===
-	// Activates printing the SQL & PHP errors.
-	// For security reasons, it is important to set this to false in production mode
-	$devMode = true;
+    //connect to database
+    include('../db.php');
+    $accepted = false;
 
-	// ==== SQL SETTINGS ====
+    if ($installed)
+    {
+        include ("size.php");
 
-	// Host URL
-	$sqlHost = "localhost";
-	$sqlPort = 3306;
-	// Database name
-	$sqlDBName = "rxversion";
-	// User
-	$sqlUser = "rxversion";
-	// Password
-	$sqlpassword = "eEGWRk7i";
-	// Table prefix
-	// DO NOT CHANGE THIS, not working yet
-	$tablePrefix = "rxv";
+        if (!$accepted)
+        {
+            $reply["label"] = "query";
+            $reply["message"] = "unknown";
+            $reply["isError"] = true;
+            $reply["color"] = "important";
+        }
+    }
+    else
+    {
+        $reply["label"] = "rxversion";
+        $reply["message"] = "not installed";
+        $reply["color"] = "critical";
+        $reply["isError"] = true;
+    }
 
-	// ==== Github Settings ====
-	$ghUsername = "YourUserName";
-	$ghToken = "YourPersonnalAccessToken";
+    echo json_encode($reply);
+
 ?>
