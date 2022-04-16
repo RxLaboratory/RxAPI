@@ -51,7 +51,11 @@
                                 $s = round($s / 1073741824, 2);
                                 $s = "{$s} GB";
                             }
-                            $reply['message'] = $s;
+                            // Get file extension
+                            $assetName = $asset["name"];
+                            $explodedName = explode('.', $assetName);
+                            $ext = end($explodedName);
+                            $reply['message'] = "$s (.{$ext})";
                             $reply['color'] = "informational";
                         }
 
