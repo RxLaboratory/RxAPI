@@ -46,4 +46,11 @@
 	// ==== Github Settings ====
 	$ghUsername = "YourUserName";
 	$ghToken = "YourPersonnalAccessToken";
+	$ghUser = "RxLaboratory";
+
+	// ==== Patreon Settings ====
+	// Leave empty if you don't use Patreon
+	// Otherwise, create an application on Patreon
+	// And add the Creator's access token here
+	$patreonToken = "";
 ?>

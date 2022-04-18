@@ -116,4 +116,47 @@
 
         return $response;
     }
+
+    function ghGraphQL( $query ) {
+        global $ghUsername;
+        global $ghToken;
+
+        $userAgent = 'RxVersions/2.0 (PHP)';
+
+        $ch = curl_init( "https://api.github.com/graphql" );
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            array(
+                "User-Agent: {$userAgent}",
+                "Content-Type: application/json;charset=utf-8",
+                "Authorization: bearer {$ghToken}"
+            )
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
+
+    function patreonRequest( $url ) {
+        global $patreonToken;
+
+        $userAgent = 'RxVersions/2.0 (PHP)';
+        $ch = curl_init( $url );
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            array(
+                "User-Agent: {$userAgent}",
+                "Content-Type: application/json;charset=utf-8",
+                "Authorization: bearer {$patreonToken}"
+            )
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
 ?>
