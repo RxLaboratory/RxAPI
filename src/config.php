@@ -43,6 +43,10 @@
 	// DO NOT CHANGE THIS, not working yet
 	$tablePrefix = "rxv";
 
+	// ==== Funding ====
+	$fundingGoal = 4000;
+	$sponsorsGoal = 1000;
+
 	// ==== Github Settings ====
 	$ghUsername = "YourUserName";
 	$ghToken = "YourPersonnalAccessToken";
@@ -53,4 +57,11 @@
 	// Otherwise, create an application on Patreon
 	// And add the Creator's access token here
 	$patreonToken = "";
+
+	// ==== WooCommerce Settings ====
+	// Leave empty if you don't use WooCommerce
+	// Otherwise create an API Key on WooCommerce
+	$wcUsername = ""; // The client key
+	$wcToken = ""; // The client secret
+	$wcProducts = array(); // List the products to check, leave empty for all. Must be the product ids.
 ?>
