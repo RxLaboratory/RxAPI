@@ -8,6 +8,7 @@
         $reply['message'] = "none";
         $reply['isError'] = false;
         $reply['color'] = "informational";
+        $reply['labelColor'] = "434343";
 
         $query = <<<JSON
         query {
@@ -47,6 +48,7 @@
                 // Check the product
                 if (count($wcProducts) > 0) {
                     foreach( $order["line_items"] as $item ) {
+                        if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
                         if (in_array($item["product_id"], $wcProducts)) {
                             $wcCount++;
                             break;
@@ -72,6 +74,7 @@
         $reply['message'] = "none";
         $reply['isError'] = false;
         $reply['color'] = "informational";
+        $reply['labelColor'] = "434343";
 
         $query = <<<JSON
         query {
@@ -105,6 +108,7 @@
             $wc = json_decode($wc, true);
             $wcCount = 0;
             foreach ($wc as $order) {
+                if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
                 // Check the product
                 if (count($wcProducts) > 0) {
                     foreach( $order["line_items"] as $item ) {
