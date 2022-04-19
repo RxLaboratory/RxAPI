@@ -1,11 +1,21 @@
 # RxVersion
- Rx Version Server : REST API to check for updates
+Rx Version Server : REST API to check for updates using Github releases
 
 Make it light, easy and simple.
 
-This is a very simple PHP+SQL server to allow scripts, add-ons, applications, etc. to check for updates.
+This is a very simple PHP+SQL server to allow scripts, add-ons, applications, etc. to check for updates.  
+It checks the Github releases of the corresponding repo to see if newer versions are available (using semantic versioning).
 
-The info is stored in an SQL server; the server doesn't provide any way to set the update information yet, one has to manually populate the SQL database using tools like phpMyAdmin.
+## Features
+
+- Check for releases or pre-releases.
+- Fetches release info: description, name, date...
+- Shows funding status and goals:
+    - Retrieves Github Sponsors
+    - Retrieves Patrons from Patreon
+    - Retrieves Products sold through WooCommerce
+- Endpoints for use with [shields.io](https://shields.io)
+- Keeps anonymous statistics: number of version checks, OS, version of the OS, etc.
 
 The software which needs to check for update just have to use a *GET* query, providing its own name and version; the server replies with the update information, a download link, etc.
 
@@ -13,17 +23,12 @@ The software which needs to check for update just have to use a *GET* query, pro
 
 ### Query
 
-`http://your.server/rxversion/?getVersion&name=Duik&version=17.0.0&os=win&osVersion=10&host=After Effects 2021&hostVersion=18.4`
+`http://your.server/rxversion/?getVersion&name=Duik&version=17.0.0`
 
-- ***getUpdate***: This arg is needed to get a version
-- ***name***: The name of the software
-- ***version***: the current version
-- ***os***, *optional*: one of `win`, `mac`, `ios`, `android`, `linux`,`any` (or `all`). If omitted, same as `any` or `all`. Any other value will be considered to be the name of a linux distribution, thus being linux too.
-- ***osVersion***, *optional*: any string identifying the version of the OS (could be a name like `Maverick` or `Focal Fossa` or a version like `10.15.2` or `20.04`, etc.)
-- ***host***, *optional*: the name of a host application, in case this is an add-on or something which depends on another app? May be `any` or (`all`). If omitted, same as `any` or `all`.
-- ***hostVersion***, *optional*: the version of the host application, could be any string.
-
-Note that the server won't match the `osVersion` and `hostVersion` to check for updates. Only the `name`, `version`, `os` and `host` are used, all other information is used only for usage statistics.
+- ***getVersion***: This arg is needed to get a version
+- ***name*** {string}: The name of the software. Should be the name of the corresponding Github Repo.
+- ***version*** {string}: The current version.
+- ***prerelease***: Add this parameter to include prereleases to the check.
 
 ### Reply
 
@@ -33,13 +38,16 @@ The server replies with a *JSON* object looking like this:
 {
     "update": true,
     "version": "17.1.0",
-    "name": "Duik",
-    "description": "This updates has a lot of bugfixes.",
     "downloadURL": "https://rainboxlab.org/tools/duik",
     "changelogURL": "http://duik.rxlab.guide/duik-16-changelog.html",
     "donateURL": "http://donate.rxlab.info",
-    "date": "2021-07-29 11:25:03",
+    "name": "Duik",
+    "newName": "Duik Ángela.1",
+    "description": "This updates has a lot of bugfixes.",
+    "date": "2021-07-29T11:25:03Z",
     "message": "Successful request.",
+    "monthlyFund": 1134,
+    "fundingGoal": 4000,
     "success": true,
     "accepted": true
 }
