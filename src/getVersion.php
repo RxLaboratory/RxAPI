@@ -42,6 +42,7 @@
             $links = end($description);
             $links = explode("\n", $links);
             foreach($links as $link) {
+                $link = str_replace("\r", "", $link);
                 $link = explode(': ', $link);
                 if (count($link) == 2 && $link[0] == 'download') $reply['downloadURL'] = $link[1];
                 if (count($link) == 2 && $link[0] == 'changelog') $reply['changelogURL'] = $link[1];

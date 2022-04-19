@@ -190,10 +190,6 @@
         return $fund / 100;
     }
 
-    function ghGetReleaseReply() {
-        global $reply;
-    }
-
     // === PATREON ===
 
     function patreonRequest( $url ) {
