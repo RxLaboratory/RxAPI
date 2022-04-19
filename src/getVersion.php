@@ -187,7 +187,16 @@
                     $rep->closeCursor();
                 }
                 
+                // Add funding info
+                // GITHUB
+                $fund = ghIncome();
+                // PATREON
+                $fund += patreonIncome();
+                // WOOCOMMERCE
+                $fund += wcIncome(); 
 
+                $reply['monthlyFund'] = $fund;
+                $reply['fundingGoal'] = $fundingGoal;
                 
             }
             else $rep->closeCursor();

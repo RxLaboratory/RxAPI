@@ -23,7 +23,7 @@
 
     //configuration and init 
 	include ("../config.php");
-    include ("functions.php");
+    include ("../functions.php");
     include ("../init.php");
     
     //prepare reply
