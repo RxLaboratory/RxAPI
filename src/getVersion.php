@@ -21,35 +21,45 @@
         If not, see http://www.gnu.org/licenses/.
 	*/
 
-    function checkOS( $os, $testOS )
-    {
-        $os = strtolower($os);
-        $testOS = strtolower($testOS);
-       
-        if ($testOS == 'all') return true;
-        if ($os == 'all' || $os == 'any' || $os == '') return true;
+    function ghGetReleaseReply($release, $version) {
+        global $reply;
+        global $donateURL;
+        global $orgURL;
+        global $orgURL;
+        // default values
+        $reply['donateURL'] = $donateURL;
+        $reply['downloadURL'] = $orgURL;
+        $reply['changelogURL'] = $orgURL;
 
-        if ($testOS == $os) return true;
+        // Parse version
+        $newVersion = $release['tagName'];
+        if (startsWith($newVersion, 'v')) $newVersion = substr($newVersion, 1);
 
-        if ($testOS == 'ios' || $testOS == 'android' || $testOS == 'win' || $testOS == 'mac') return false;
+        // Parse description
+        $description = $release['description'];
+        $description = explode("----", $description);
+        if (count($description) > 1) {
+            $links = end($description);
+            $links = explode("\n", $links);
+            foreach($links as $link) {
+                $link = explode(': ', $link);
+                if (count($link) == 2 && $link[0] == 'download') $reply['downloadURL'] = $link[1];
+                if (count($link) == 2 && $link[0] == 'changelog') $reply['changelogURL'] = $link[1];
+                if (count($link) == 2 && $link[0] == 'donate') $reply['donateURL'] = $link[1];
+            }
+        }
+        $description = $description[0];
 
-        return true;
-    }
-
-    function checkHost( $host, $testHost )
-    {
-        $host = strtolower($host);
-        $testHost = strtolower($testHost);
-       
-        if ($testHost == 'all') return true;
-        if ($host == 'all' || $host == 'any' || $host == '') return true;
-
-        return $testHost == $host;
+        $reply['update'] = checkVersion( $version, $newVersion );
+        $reply['version'] = $newVersion;
+        $reply['newName'] = $release['name'];
+        $reply['description'] = $description;
+        $reply['date'] = $release['publishedAt'];
     }
 
     function checkVersion( $version, $testVersion )
     {
-        $reV = '/^(\d+)\.?(\d*)\.?(\d*)\D?(\S*)/i';
+        $reV = '/^v?(\d+)\.?(\d*)\.?(\d*)\D?(\S*)/i';
 
         // Get info from versions
         preg_match( $reV, $version, $versionMatches );
@@ -104,102 +114,113 @@
         $osVersion = getArg("osVersion");
         $host = getArg("host");
         $hostVersion = getArg("hostVersion");
+        $prerelease = hasArg("prerelease");
         
-        if ( checkArgs( array( $name, $version, $os ) ) )
+        if ( checkArgs( array( $name, $version ) ) )
         {
-            // Get the update info
+            $reply['update'] = false;
+            $reply['name'] = $name;
+            $appId = 0;
+            $found = false;
+
+            // Github data
+            $ghToolUser = $ghUser;
+            $ghRepo = $name;
+
+            // Check if we've data in the DB to override defaults
+            // Get the info
             $rep = $db->prepare( "SELECT
                     {$appsTable}.`id`,
-                    {$versionsTable}.`version`,
-                    {$appsTable}.`os`,
-                    {$appsTable}.`host`,
-                    {$versionsTable}.`description`,
-                    {$versionsTable}.`downloadURL`,
-                    {$versionsTable}.`changelogURL`,
-                    {$versionsTable}.`donateURL`,
-                    {$versionsTable}.`date`
-                FROM {$versionsTable}
-                JOIN {$appsTable} ON {$appsTable}.`id` = {$versionsTable}.`app`
-                WHERE {$appsTable}.`name` = :name
-                ORDER BY `date` DESC;"
+                    {$appsTable}.`ghUser`,
+                    {$appsTable}.`ghRepo`
+                FROM {$appsTable}
+                WHERE {$appsTable}.`name` = :name;"
                 );
-
             $rep->bindValue(':name', $name, PDO::PARAM_STR);
             $ok = sqlRequest( $rep, "Successful request." );
-
             if ($ok)
             {
-                $reply['update'] = false;
-                $appId = 0;
-                $found = false;
+                if ($v = $rep->fetch()) {
+                    if($v['ghUser']) $ghToolUser = $v['ghUser'];
+                    if($v['ghRepo']) $ghRepo = $v['ghRepo'];
+                }
+                $rep->closeCursor();
+            }
 
-                // Look for the latest version for the same os
-                while ($v = $rep->fetch())
-                {
-                    $appId = (int)$v['id'];
-                    // First, check os
-                    if (!checkOS( $os, $v['os'])) continue;
-                    // Check host
-                    if (!checkHost( $host, $v['host'])) continue;
+            // Get update info from Github
+            $query = <<<JSON
+            {
+                repository(owner: "$ghToolUser", name: "$ghRepo") {
+                    releases(first: 50, orderBy: {field: CREATED_AT, direction: DESC}) {
+                        nodes {
+                            publishedAt,
+                            tagName,
+                            description,
+                            isPrerelease,
+                            name
+                        }
+                    }
+                }
+            }
+            JSON;
+            $variables = '';
+            $query = json_encode(['query' => $query, 'variables' => $variables]);
 
-                    // Found os, check version
-                    $reply['update'] = checkVersion( $version, $v['version'] );
-                    // Populate reply
-                    $reply['version'] = $v['version'];
-                    $reply['name'] = $name;
-                    $reply['description'] = $v['description'];
-                    $reply['downloadURL'] = $v['downloadURL'];
-                    $reply['changelogURL'] = $v['changelogURL'];
-                    $reply['donateURL'] = $v['donateURL'];
-                    $reply['date'] = $v['date'];
+            $gh = ghGraphQL( $query );
+            $gh = json_decode($gh, true);
 
+            $releases = $gh['data']['repository']['releases']['nodes'];
+
+            foreach($releases as $release) {
+                if ($prerelease || !$release['isPrerelease']) {
+                    
+                    ghGetReleaseReply($release, $version);
                     $found = true;
                     break;
                 }
-
-                if (!$found)
-                {
-                    $reply['success'] = false;
-                    $reply['message'] = "It seems this is an unknown software or no version has been published yet, can't check version.";
-                }
-
-                if($appId > 0)
-                {
-                    // Update stats
-                    $rep = $db->prepare( "INSERT INTO {$statsTable} (`app`, `appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`)
-                        VALUES (
-                            :id,
-                            :name,
-                            :version,
-                            :os,
-                            :osVersion,
-                            :host,
-                            :hostVersion
-                        );");
-                    $rep->bindValue(':id', $appId, PDO::PARAM_INT);
-                    $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
-                    $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
-                    $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
-                    $rep->bindValue(':osVersion', trim($osVersion), PDO::PARAM_STR);
-                    $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
-                    $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
-                    $rep->execute();
-                    $rep->closeCursor();
-                }
-                
-                // Add funding info
-                // GITHUB
-                $fund = ghIncome();
-                // PATREON
-                $fund += patreonIncome();
-                // WOOCOMMERCE
-                $fund += wcIncome(); 
-
-                $reply['monthlyFund'] = $fund;
-                $reply['fundingGoal'] = $fundingGoal;
-                
             }
-            else $rep->closeCursor();
+            // If not found and not prerelease, pick the latest prerelease anyway
+            if (!$found && count($releases) > 0) {
+                ghGetReleaseReply($releases[0], $version);
+                $found = true;
+            }
+
+            if (!$found)
+            {
+                $reply['success'] = false;
+                $reply['message'] = "It seems this is an unknown software or no public version has been published yet.";
+            }
+
+            // Update stats
+            $rep = $db->prepare( "INSERT INTO {$statsTable} (`appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`)
+                VALUES (
+                    :name,
+                    :version,
+                    :os,
+                    :osVersion,
+                    :host,
+                    :hostVersion
+                );");
+            $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
+            $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
+            $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
+            $rep->bindValue(':osVersion', trim($osVersion), PDO::PARAM_STR);
+            $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
+            $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
+            $rep->execute();
+            $rep->closeCursor();
+            
+            // Add funding info
+            // GITHUB
+            $fund = ghIncome();
+            // PATREON
+            $fund += patreonIncome();
+            // WOOCOMMERCE
+            $fund += wcIncome(); 
+
+            $reply['monthlyFund'] = $fund;
+            $reply['fundingGoal'] = $fundingGoal;
+                
         }
 
     }

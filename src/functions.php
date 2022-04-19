@@ -190,6 +190,10 @@
         return $fund / 100;
     }
 
+    function ghGetReleaseReply() {
+        global $reply;
+    }
+
     // === PATREON ===
 
     function patreonRequest( $url ) {
@@ -299,22 +303,23 @@
             $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100" );
             $wc = json_decode($wc, true);
             $wcCount = 0;
-            foreach ($wc as $order) {
-                if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
-                // Check the product
-                if (count($wcProducts) > 0) {
-                    foreach( $order["line_items"] as $item ) {
-                        if (in_array($item["product_id"], $wcProducts)) {
-                            $wcCount += (int)$item["subtotal"];
-                            break;
+            if (gettype($wc) == 'array')
+                foreach ($wc as $order) {
+                    if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
+                    // Check the product
+                    if (count($wcProducts) > 0) {
+                        foreach( $order["line_items"] as $item ) {
+                            if (in_array($item["product_id"], $wcProducts)) {
+                                $wcCount += (int)$item["subtotal"];
+                                break;
+                            }
                         }
                     }
+                    // add whole order
+                    else {
+                        $wcCount += $wc["total"];
+                    }
                 }
-                // add whole order
-                else {
-                    $wcCount += $wc["total"];
-                }
-            }
 
             return $wcCount;
         }

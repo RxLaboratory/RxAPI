@@ -43,13 +43,17 @@
 	// DO NOT CHANGE THIS, not working yet
 	$tablePrefix = "rxv";
 
+	// ==== General Settings ====
+	$orgURL = 'https://rxlaboratory.org';
+
 	// ==== Funding ====
 	$fundingGoal = 4000;
 	$sponsorsGoal = 1000;
+	$donateURL = 'http://donate.rxlab.info';
 
 	// ==== Github Settings ====
-	$ghUsername = "YourUserName";
-	$ghToken = "YourPersonnalAccessToken";
+	$ghUsername = "YourPersonalUserName";
+	$ghToken = "YourPersonalAccessToken";
 	$ghUser = "RxLaboratory";
 
 	// ==== Patreon Settings ====
@@ -61,7 +65,10 @@
 	// ==== WooCommerce Settings ====
 	// Leave empty if you don't use WooCommerce
 	// Otherwise create an API Key on WooCommerce
-	$wcUsername = ""; // The client key
-	$wcToken = ""; // The client secret
-	$wcProducts = array(); // List the products to check, leave empty for all. Must be the product ids.
+	// The client key
+	$wcUsername = "";
+	// The client secret
+	$wcToken = "";
+	// List the products to check, leave empty for all. Must be the product ids.
+	$wcProducts = array();
 ?>
