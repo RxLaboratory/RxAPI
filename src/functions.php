@@ -104,13 +104,51 @@
 		$reply["query"] = $queryName;
     }
 
+    // === CACHE ===
+    function getCache( $name ) {
+        global $cacheTimeout;
+
+        // Create the cache folder
+        if (!is_dir("cache")) mkdir("cache", 0744);
+
+        // Get file if it exists and is young enough
+        $cacheFile = "cache/" . $name;
+
+        if (file_exists($cacheFile) && time() - $cacheTimeout < filemtime($cacheFile)) {
+            $cached = fopen($cacheFile, 'r');
+            $content = "";
+            if ($cached !== false) {
+                $content = fread($cached, filesize($cacheFile));
+                fclose($cached);
+            }
+            return $content;
+        }
+
+        return "";
+    }
+
+    function saveCache( $name, $content ) {
+        // Create the cache folder
+        if (!is_dir("cache")) mkdir("cache", 0744);
+
+        // Get file
+        $cacheFile = "cache/" . $name;
+
+        // Cache the contents to a cache file
+        $cached = fopen($cacheFile, 'w');
+        if ($cached !== false) {
+            fwrite($cached, $content);
+            fclose($cached);
+        }
+    }
+
     // === GITHUB ===
 
     function ghRequest( $url ) {
         global $ghUsername;
         global $ghToken;
 
-        $userAgent = 'RxVersions/2.0 (PHP)';
+        $userAgent = 'RxAPI/2.0 (PHP)';
 
         $ch = curl_init( $url );
         curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
@@ -129,7 +167,7 @@
         global $ghUsername;
         global $ghToken;
 
-        $userAgent = 'RxVersions/2.0 (PHP)';
+        $userAgent = 'RxAPI/2.0 (PHP)';
 
         $ch = curl_init( "https://api.github.com/graphql" );
         curl_setopt($ch, CURLOPT_HTTPHEADER,
@@ -150,6 +188,10 @@
     }
 
     function ghBackers() {
+
+        $cached = getCache( "ghBackers" );
+        if ($cached != "") return (int)$cached;
+
         global $ghUser;
 
         $query = <<<JSON
@@ -167,10 +209,18 @@
 
         $gh = ghGraphQL($query);
         $gh = json_decode($gh, true);
-        return $gh["data"]["organization"]["sponsors"]["totalCount"];
+
+        $count = $gh["data"]["organization"]["sponsors"]["totalCount"];
+
+        saveCache("ghBackers", $count);
+
+        return $count;
     }
 
     function ghIncome() {
+        $cached = getCache( "ghIncome" );
+        if ($cached != "") return (float)$cached;
+
         global $ghUser;
 
         $query = <<<JSON
@@ -186,8 +236,11 @@
 
         $gh = ghGraphQL($query);
         $gh = json_decode($gh, true);
-        $fund = $gh["data"]["organization"]["monthlyEstimatedSponsorsIncomeInCents"];
-        return $fund / 100;
+        $fund = $gh["data"]["organization"]["monthlyEstimatedSponsorsIncomeInCents"] / 100;
+
+        saveCache("ghIncome", $fund);
+
+        return $fund;
     }
 
     // === PATREON ===
@@ -195,7 +248,7 @@
     function patreonRequest( $url ) {
         global $patreonToken;
 
-        $userAgent = 'RxVersions/2.0 (PHP)';
+        $userAgent = 'RxAPI/2.0 (PHP)';
         $ch = curl_init( $url );
         curl_setopt($ch, CURLOPT_HTTPHEADER,
             array(
@@ -212,25 +265,135 @@
     }
 
     function patreonBackers() {
+        $cached = getCache( "patreonBackers" );
+        if ($cached != "") return (int)$cached;
+
         global $patreonToken;
         // Add Patreon count
         if ($patreonToken != "") {
             $patreon = patreonRequest("https://www.patreon.com/api/oauth2/api/current_user/campaigns");
             $patreon = json_decode($patreon, true);
-            return $patreon["data"][0]["attributes"]["patron_count"];
+
+            $count = $patreon["data"][0]["attributes"]["patron_count"];
+            saveCache("patreonBackers", $count);
+
+            return $count;
         };
         return 0;
     }
 
     function patreonIncome() {
+        $cached = getCache( "patreonIncome" );
+        if ($cached != "") return (float)$cached;
+
         global $patreonToken;
         // Add Patreon count
         if ($patreonToken != "") {
             $patreon = patreonRequest("https://www.patreon.com/api/oauth2/api/current_user/campaigns");
             $patreon = json_decode($patreon, true);
-            return $patreon["data"][0]["attributes"]["pledge_sum"] / 100;
+            $fund = $patreon["data"][0]["attributes"]["pledge_sum"] / 100;
+            saveCache("patreonIncome", $fund);
+            return $fund;
         };
         return 0;
+    }
+
+    // === WORDPRESS MEMBERSHIP ===
+    function wpRequest( $url ) {
+        global $wpUsername;
+        global $wpPassword;
+
+        $userAgent = 'RxAPI/2.0 (PHP)';
+
+        $ch = curl_init( $url );
+        curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
+        curl_setopt($ch, CURLOPT_USERPWD, "{$wpUsername}:{$wpPassword}");
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // Set so curl_exec returns the result instead of outputting it.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Get the response and close the channel.
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
+
+    function wpBackers() {
+        $cached = getCache( "wpBackers" );
+        if ($cached != "") return (int)$cached;
+
+        global $wpUsername;
+        global $wpPassword;
+
+        if ($wpUsername == "" || $wpPassword == "") return 0;
+
+        $count = 0;
+
+        $members = wpRequest("https://rxlaboratory.org/wp-json/wp/v2/users?roles=subscriber,customer");
+        $members = json_decode($members, true);
+
+        // For each member, check the membership
+        foreach( $members as $member ) {
+            $id = $member['id'];
+            $level = wpRequest("https://rxlaboratory.org/wp-json/pmpro/v1/get_membership_level_for_user?user_id={$id}");
+            $level = json_decode($level, true);
+            if ($level) {
+                $enddate = (int)$level["enddate"];
+                if ( $enddate == 0 || $enddate > time() ) $count++;
+            }
+        }
+
+        saveCache("wpBackers", $count);
+        return $count;
+    }
+
+    function wpIncome() {
+        $cached = getCache( "wpIncome" );
+        if ($cached != "") return (float)$cached;
+
+        global $wpUsername;
+        global $wpPassword;
+
+        if ($wpUsername == "" || $wpPassword == "") return 0;
+
+        $fund = 0;
+
+        $members = wpRequest("https://rxlaboratory.org/wp-json/wp/v2/users?roles=subscriber,customer");
+        $members = json_decode($members, true);
+
+        // For each member, check the membership
+        foreach( $members as $member ) {
+            $id = $member['id'];
+            $level = wpRequest("https://rxlaboratory.org/wp-json/pmpro/v1/get_membership_level_for_user?user_id={$id}");
+            
+            $level = json_decode($level, true);
+            if ($level) {
+                $enddate = (int)$level["enddate"];
+                if ( $enddate > 0 && $enddate < time() ) continue;
+
+                $amount = (float)$level["billing_amount"];
+                $cycle_num = (int)$level["cycle_number"];
+                $cycle_period = $level["cycle_period"];
+                if ($cycle_num == 0) continue;
+
+                if ($cycle_period == "Day") {
+                    $amount = (30 / $cycle_num) * $amount;
+                }
+                else if ($cycle_period == "Week") {
+                    $amount = (4 / $cycle_num) * $amount;
+                }
+                else if ($cycle_period == "Month") {
+                    $amount = $amount / $cycle_num;
+                }
+                else if ($cycle_period == "Year") {
+                    $amount = $amount / (12 * $cycle_num);
+                }
+
+                $fund += $amount;
+            }
+        }
+        saveCache("wpIncome", $fund);
+        return $fund;
     }
 
     // === WOOCOMMERCE ===
@@ -240,7 +403,7 @@
         global $wcToken;
         global $wcProducts;
 
-        $userAgent = 'RxVersions/2.0 (PHP)';
+        $userAgent = 'RxAPI/2.0 (PHP)';
 
         $ch = curl_init( $url );
         curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
@@ -256,6 +419,9 @@
     }
 
     function wcBackers() {
+        $cached = getCache( "wcBackers" );
+        if ($cached != "") return (int)$cached;
+
         global $wcToken;
         global $wcUsername;
         global $wcProducts;
@@ -283,12 +449,16 @@
                 }
             }
 
+            saveCache("wcBackers", $wcCount);
             return $wcCount;
         }
         return 0;
     }
 
     function wcIncome() {
+        $cached = getCache( "wcIncome" );
+        if ($cached != "") return (float)$cached;
+
         global $wcToken;
         global $wcUsername;
         global $wcProducts;
@@ -317,6 +487,7 @@
                     }
                 }
 
+            saveCache("wcIncome", $wcCount);
             return $wcCount;
         }
         return 0;

@@ -1,5 +1,5 @@
 <?php
-    if ( hasArg( "numBackers") ) {
+    if ( hasArg( "numBackers" ) ) {
         $accepted = true;
 
         $reply['label'] = "sponsors";
@@ -14,6 +14,9 @@
         // GET PATREON PATRONS
         $sponsors += patreonBackers();
 
+        // GET WORDPRESS MEMBERS
+        $sponsors += wpBackers();
+
         // GET WOOCOMMERCE ORDERS
         $sponsors += wcBackers();
 
@@ -25,7 +28,6 @@
         }
         
         $reply['message'] = strval( $sponsors );
-
     }
 
     if ( hasArg( "monthlyIncome") ) {
@@ -42,6 +44,9 @@
 
         // PATREON
         $fund += patreonIncome();
+
+        // WORDPRESS
+        $fund += wpIncome();
 
         // WOOCOMMERCE
         $fund += wcIncome();      

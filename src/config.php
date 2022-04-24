@@ -44,7 +44,10 @@
 	$tablePrefix = "rxv";
 
 	// ==== General Settings ====
+	// Main associated website
 	$orgURL = 'https://rxlaboratory.org';
+	// How long to cache results to improve perfs (seconds, default is 300)
+	$cacheTimeout = 300;
 
 	// ==== Funding ====
 	$fundingGoal = 4000;
@@ -61,6 +64,14 @@
 	// Otherwise, create an application on Patreon
 	// And add the Creator's access token here
 	$patreonToken = "";
+
+	// ==== WordPress Settings ====
+	// Leave empty if you don't use WordPress
+	// Otherwise, create an application password in your WordPress user profile
+	// Your username
+	$wpUsername = "";
+	// The application password
+	$wpPassword = "";
 
 	// ==== WooCommerce Settings ====
 	// Leave empty if you don't use WooCommerce
