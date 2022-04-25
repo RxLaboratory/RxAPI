@@ -75,7 +75,7 @@
         return $ok;
     }
 
-    function sqlRequest( $request, $message, $debug = false )
+    function sqlRequest( $request, $message = "", $debug = false )
     {
         global $reply;
 
