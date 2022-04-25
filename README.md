@@ -1,5 +1,5 @@
-# RxVersion
-Rx Version Server : REST API to check for updates using Github releases
+# RxAPI
+RxLaboratory API : Public REST API to check for updates using Github releases, and retrieve general information about the organisation current status (funding, etc).
 
 [![PHP](https://img.shields.io/badge/Web-PHP-informational?color=lightgrey&logo=php)](#) [![GitHub](https://img.shields.io/github/license/RxLaboratory/Duik?color=lightgrey)](LICENSE.md)
 
@@ -30,15 +30,18 @@ It checks the Github releases of the corresponding repo to see if newer versions
 ## Features
 
 - Check for releases or pre-releases.
-- Fetches release info: description, name, date...
+- Fetches release info: description, name, date, size...
 - Shows funding status and goals:
-    - Retrieves Github Sponsors
-    - Retrieves Patrons from Patreon
-    - Retrieves Products sold through WooCommerce
+    - Retrieves *Github Sponsors*
+    - Retrieves Patrons from *Patreon*
+    - Retrieves Membership through Wordpress *Paid Memberships Pro* plugin.
+    - Retrieves Products sold through *WooCommerce*
 - Endpoints for use with [shields.io](https://shields.io)
 - Keeps anonymous statistics: number of version checks, OS, version of the OS, etc.
 
 The software which needs to check for update just have to use a *GET* query, providing its own name and version; the server replies with the update information, a download link, etc.
+
+This server communicates with other API via HTTPS, but the public API can post through HTTP to make it availabe to Adobe ExtendScript.
 
 ## Example
 
