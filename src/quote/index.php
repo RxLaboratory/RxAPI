@@ -33,7 +33,7 @@
     $quotes = json_decode($quotes);
 
     // Choose random quote
-    $rdm = random_int(0,count($quotes) - 1);
+    $rdm = array_rand( $quotes );
 
     // And print
     $reply = $quotes[$rdm];
