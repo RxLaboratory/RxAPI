@@ -1,4 +1,19 @@
 <?php
+    if ( hasArg( "dailyUsers" ) ) {
+        $accepted = true;
+
+        $reply['label'] = "Daily Users";
+        $reply['message'] = "none";
+        $reply['isError'] = false;
+        $reply['color'] = "informational";
+        $reply['labelColor'] = "434343";
+
+        $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
+
+        $numUsers = round($stats["userCount"] / 30 + 8000);
+        $reply['message'] = strval( $numUsers );
+    }
+
     if ( hasArg( "numBackers" ) ) {
         $accepted = true;
 
@@ -20,14 +35,16 @@
         // GET WOOCOMMERCE ORDERS
         $sponsors += wcBackers();
 
-        if ($sponsorsGoal > 0) {
-            $ratio = $sponsors / $sponsorsGoal;
-            if ($ratio < 0.25) $reply['color'] = "critical";
-            if ($ratio < 0.5) $reply['color'] = "important";
-            if ($ratio > 0.75) $reply['color'] = "success";
-        }
+        // CHECK ratio against daily users
+        $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
+        $numUsers = $stats["userCount"] / 30 + 8000;
+        $userRatio = round( $sponsors / $numUsers * 100 );
+
+        if ($userRatio < 25) $reply['color'] = "critical";
+        if ($userRatio < 50) $reply['color'] = "important";
+        if ($userRatio > 75) $reply['color'] = "success";
         
-        $reply['message'] = strval( $sponsors );
+        $reply['message'] = $sponsors . " (" . $userRatio . " %)";
     }
 
     if ( hasArg( "monthlyIncome") ) {

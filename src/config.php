@@ -51,7 +51,6 @@
 
 	// ==== Funding ====
 	$fundingGoal = 4000;
-	$sponsorsGoal = 1000;
 	$donateURL = 'http://donate.rxlab.info';
 
 	// ==== Github Settings ====

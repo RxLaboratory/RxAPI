@@ -7,6 +7,7 @@
         $reply['isError'] = false;
         $reply['color'] = "lightgrey";
         $reply['namedLogo'] = "windows";
+        $reply['labelColor'] = "434343";
 
         $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
         if ($stats) {
@@ -23,6 +24,7 @@
         $reply['isError'] = false;
         $reply['color'] = "lightgrey";
         $reply['namedLogo'] = "apple";
+        $reply['labelColor'] = "434343";
 
         $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
         if ($stats) {
@@ -41,6 +43,7 @@
         $reply['isError'] = false;
         $reply['color'] = "lightgrey";
         $reply['namedLogo'] = "linux";
+        $reply['labelColor'] = "434343";
 
         $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
         if ($stats) {

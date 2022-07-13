@@ -55,6 +55,7 @@
         $reply["isError"] = true;
     }
 
+    unset($reply['success']);
     echo json_encode($reply);
 
 ?>

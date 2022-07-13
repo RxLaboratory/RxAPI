@@ -30,6 +30,7 @@
 
         $stats = getStats($from, $to );
         if ($stats) {
+            $reply["success"] = true;
             $reply['winCount'] = $stats["winCount"];
             $reply['winRatio'] = $stats["winRatio"];
             $reply['macCount'] = $stats["macCount"];

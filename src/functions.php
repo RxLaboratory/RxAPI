@@ -496,7 +496,7 @@
     // === STATS ===
     function getStats($from, $to) {
         $cached = getCache( "getStats" );
-        if ($cached != "") return $cached;
+        if ($cached != "") return json_decode($cached, true);
 
         global $db, $statsTable;
 
@@ -567,6 +567,8 @@
             $stats['linuxRatio'] = $linuxRatio;
             $stats['userCount'] = $userCount;
             $stats['apps'] = $allApps;
+
+            saveCache("getStats", json_encode($stats));
 
             return $stats;
         }
