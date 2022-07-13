@@ -13,7 +13,6 @@
 	setupTablePrefix();
 
 	//build table names
-	$versionsTable = $tablePrefix . "versions";
 	$statsTable = $tablePrefix . "stats";	
 	$appsTable = $tablePrefix . "apps";	
 ?>

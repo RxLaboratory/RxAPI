@@ -36,6 +36,7 @@
     if ($installed)
     {
         include ("size.php");
+        include ("stats.php");
         include ("funding.php");
 
         if (!$accepted)

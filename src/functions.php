@@ -492,5 +492,86 @@
         }
         return 0;
     }
+
+    // === STATS ===
+    function getStats($from, $to) {
+        $cached = getCache( "getStats" );
+        if ($cached != "") return $cached;
+
+        global $db, $statsTable;
+
+        $rep = $db->prepare( "SELECT *
+                FROM {$statsTable}
+                WHERE {$statsTable}.`date` >= :from
+                    AND {$statsTable}.`date` <= :to
+                    ;"
+                );
+        $rep->bindValue(':from', $from, PDO::PARAM_STR);
+        $rep->bindValue(':to', $to, PDO::PARAM_STR);
+        $ok = sqlRequest( $rep, "Successful request." );
+
+        // prepare results
+        $winCount = 0;
+        $macCount = 0;
+        $linuxCount = 0;
+        $userCount = 0;
+        $winRatio = 0;
+        $macRatio = 0;
+        $linuxRatio = 0;
+        $apps = array();
+
+        if ($ok)
+        {
+            $stats = array();
+
+            while ($v = $rep->fetch()) {
+                if($v['os'] == 'win') $winCount++;
+                else if($v['os'] == 'mac') $macCount++;
+                else if($v['os'] == 'linux') $linuxCount++;
+                else continue;
+                $userCount++;
+                $app = array();
+                $app['name'] = $v['appName'];
+                if (!isset($apps[$app['name']])) {
+                    $app["count"] = 1;
+                    $app["ratio"] = 0;
+                    $app["host"] = $v['host'];
+                    $apps[$app['name']] = $app;
+                }
+                else {
+                    $apps[$app['name']]["count"]++;
+                }
+            }
+            $rep->closeCursor();
+
+            // ratio
+            $allApps = array();
+            foreach( $apps as $app ) {
+                $app["ratio"] = round($app["count"] / $userCount * 100);
+                $allApps[] = $app;
+            }
+            $winRatio = round($winCount / $userCount * 100);
+            $macRatio = round($macCount / $userCount * 100);
+            $linuxRatio = round($linuxCount / $userCount * 100);
+
+            // sort apps
+            usort($allApps, function($a, $b) {
+                return $b["count"] - $a["count"];
+            });
+
+            $stats['winCount'] = $winCount;
+            $stats['winRatio'] = $winRatio;
+            $stats['macCount'] = $macCount;
+            $stats['macRatio'] = $macRatio;
+            $stats['linuxCount'] = $linuxCount;
+            $stats['linuxRatio'] = $linuxRatio;
+            $stats['userCount'] = $userCount;
+            $stats['apps'] = $allApps;
+
+            return $stats;
+        }
+
+        return false;
+    }
     
 ?>

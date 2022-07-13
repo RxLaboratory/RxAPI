@@ -1,10 +1,10 @@
 <?php
     /*
-		RxVersion
+		RxAPI
         
         This program is licensed under the GNU General Public License.
 
-        Copyright (C) 2020-2022 Nicolas Dufresne and Contributors.
+        Copyright (C) 20202-2021 Nicolas Dufresne and Contributors.
 
         This program is free software;
         you can redistribute it and/or modify it
@@ -21,33 +21,23 @@
         If not, see http://www.gnu.org/licenses/.
 	*/
 
-    // Edit this configuration file before running the install script at /install/index.php
-    
-    //configuration and init 
-	include ("config.php");
-	include ("functions.php");
-    include ("init.php");
+    if (hasArg("getStats"))
+	{
+        $reply["accepted"] = true;
 
-    //prepare reply
-	include ("reply.php");
+        $from = getArg("from", date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))));
+        $to = getArg("to", date("Y-m-d H:i:s"));
 
-    //connect to database
-    include('db.php');
-
-    if ($installed)
-    {
-        include ("getVersion.php");
-        include ("getStats.php");
-
-        if (!$reply["accepted"])
-        {
-            $reply["message"] = "Unknown query";
+        $stats = getStats($from, $to );
+        if ($stats) {
+            $reply['winCount'] = $stats["winCount"];
+            $reply['winRatio'] = $stats["winRatio"];
+            $reply['macCount'] = $stats["macCount"];
+            $reply['macRatio'] = $stats["macRatio"];
+            $reply['linuxCount'] = $stats["linuxCount"];
+            $reply['linuxRatio'] = $stats["linuxRatio"];
+            $reply['userCount'] = $stats["userCount"];
+            $reply['apps'] = $stats["apps"];
         }
     }
-    else
-    {
-        $reply["message"] = "This RxVersion server is not installed yet.";
-    }
-    
-	echo json_encode($reply);
 ?>
