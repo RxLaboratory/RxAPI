@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The RxAPI comprehensive documentation">
+    <meta name="author" content="Nicolas Dufresne and contributors">
+    <link rel="canonical" href="http://rxapi.rxlab.io/api.html">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    
+    <title>API - RxAPI</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="css/base.min.css" rel="stylesheet">
+    <link href="css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/zenburn.min.css">
+        
+    
+    <link href="style.css" rel="stylesheet">
+    <link href="video.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            
+              <a class="navbar-brand" href="index.html">RxAPI</a>
+            
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="index.html">v1.0.0</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="install.html">Install</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="api.html">API</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="quote.html">Quote</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="shields.html">Shields</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">... <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="changelog.html">Changelog</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="http://contact.rxlab.info">Contact</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="http://chat.rxlab.info">Chat</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="http://donate.rxlab.info">Donate</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">License</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="gnu-gpl.html">GNU GPLv3</a>
+</li>
+
+        
+            
+<li >
+    <a href="doc-license.html">Documentation license</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="install.html">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="next" href="quote.html">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/RxLaboratory/RxAPI/tree/master/src/docs/api.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div id="side-menu">
+    <div class="bs-sidebar hidden-print  affix well collapsible" role="complementary">
+        <!-- Main navigation -->
+        <ul class="nav bs-sidenav">
+        
+        
+            <li >
+                <a href="index.html">v1.0.0</a>
+            </li>
+        
+        
+        
+            <li >
+                <a href="install.html">Install</a>
+            </li>
+        
+        
+        
+            <li class="active">
+                <a href="api.html">API</a>
+            </li>
+        
+        
+        
+            <li >
+                <a href="quote.html">Quote</a>
+            </li>
+        
+        
+        
+            <li >
+                <a href="shields.html">Shields</a>
+            </li>
+        
+        
+        
+            <li class="first-level">
+                <button  type="button" class="collapse-button ">...</button>
+                <ul class="collapsible-content ">
+                    
+                        
+                        <li class="second-level "><a href="changelog.html">Changelog</a></li>
+                        
+                    
+                        
+                        <li class="second-level "><a href="http://contact.rxlab.info">Contact</a></li>
+                        
+                    
+                        
+                        <li class="second-level "><a href="http://chat.rxlab.info">Chat</a></li>
+                        
+                    
+                        
+                        <li class="second-level "><a href="http://donate.rxlab.info">Donate</a></li>
+                        
+                    
+                        
+                        <li class="second-level">
+                            <button  type="button" class="collapse-button ">License</button>
+                            <ul class="collapsible-content ">
+                                
+                                    
+                                    <li class="third-level "><a href="gnu-gpl.html">GNU GPLv3</a></li>
+                                    
+                                
+                                    
+                                    <li class="third-level "><a href="doc-license.html">Documentation license</a></li>
+                                    
+                                
+                            </ul>
+                        </li>
+                        
+                    
+                </ul>
+            </li>
+        
+        
+        </ul>
+    </div>
+    <div class="bs-sidebar hidden-print affix well" role="complementary">
+        <ul class="nav bs-sidenav">
+            <li class="first-level active"><a href="#api-reference">API reference</a></li>
+                <li class="second-level"><a href="#introduction">Introduction</a></li>
+                    
+                    <li class="third-level"><a href="#update-info">Update info</a></li>
+                    <li class="third-level"><a href="#funding-info">Funding info</a></li>
+                    <li class="third-level"><a href="#statistics">Statistics</a></li>
+                    <li class="third-level"><a href="#shields">Shields</a></li>
+                    <li class="third-level"><a href="#quote">Quote</a></li>
+                <li class="second-level"><a href="#usage">Usage</a></li>
+                    
+                    <li class="third-level"><a href="#update-and-funding-information">Update and funding information</a></li>
+                    <li class="third-level"><a href="#statistics_1">Statistics</a></li>
+        </ul>
+    </div>
+    <div class="footer-meta"></div>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<p><img alt="META" src="authors:Nicolas &quot;Duduf&quot; Dufresne;license:GNU-FDL;copyright:2022;updated:2022/07/18" /></p>
+<h1 id="api-reference">API reference</h1>
+<h2 id="introduction">Introduction</h2>
+<p><em>RxAPI</em> is able to serve <strong>update and funding information</strong> about any tool you&rsquo;re developing/maintaining/releasing. When a script or application checks if an update is available, <em>RxAPI</em> stores some anonymous information and is able to serve some usage statistics. This data can not be used to identify or track individual users in any way; there&rsquo;s no fingerprinting possible.</p>
+<h3 id="update-info">Update info</h3>
+<p>The update information is pulled from <strong>github repositories</strong>, using the <em>release</em> features. We may add support for <em>Gitlab</em> later.</p>
+<h3 id="funding-info">Funding info</h3>
+<p><em>RxAPI</em> also collects funding information from various sources, to summarize all the funds and supporters got by the organization. These are the current sources (we may add more later):</p>
+<ul>
+<li><strong>Github Sponsors</strong></li>
+<li>WordPress: <strong>WooCommerce</strong></li>
+<li>WordPress: <strong>Paid Memberships Pro</strong></li>
+<li><strong>Patreon</strong></li>
+</ul>
+<h3 id="statistics">Statistics</h3>
+<p>For each request from a script or application, <em>RxAPI</em> stores the following information, if it is provided by the script or application:</p>
+<ul>
+<li>Script / Application <strong>name and version</strong></li>
+<li><strong>OS</strong> and OS version</li>
+<li><strong>Host application</strong> and its version (if any)</li>
+<li>The <strong>date</strong> of the request</li>
+</ul>
+<p>We may add geographical data later (such as the country).</p>
+<p>This data can be retrieved by a request to the API.</p>
+<p>Script and application should check for update once a day and not more: that&rsquo;s a reliable way to estimate the number of daily users.</p>
+<h3 id="shields">Shields</h3>
+<p><em>RxAPI</em> provides a specific endpoint to be used with <a href="http://shields.io">shields.io</a>. Read <a href="shields.html">more details here</a>.</p>
+<h3 id="quote">Quote</h3>
+<p><em>RxAPI</em> provides a special endpoint to get random quotes. Read <a href="quote.html">more details here</a>.</p>
+<h2 id="usage">Usage</h2>
+<p>For the following documentation, we&rsquo;re using our official <em>RxLab</em> server instance as an example. It is located at <code>http://api.rxlab.io</code>.</p>
+<h3 id="update-and-funding-information">Update and funding information</h3>
+<p>Endpoint: <code>http://api.rxlab.io</code></p>
+<h4 id="request">Request</h4>
+<ul>
+<li><strong><em>getVersion</em></strong></li>
+<li><strong><em>name</em></strong>: the name of the script / application checking for update. This should be the name of the corresponding <em>Github</em> repository, unless an alias has been setup on the server side.</li>
+<li><strong><em>version</em></strong>: the version of the script / application, a string using <a href="https://semver.org/">semantic versionning</a> in the form <code>M.m.p</code>, e.g. <code>1.2.0</code>.</li>
+<li><strong><em>os</em></strong> (optional): the operating system. It should be one of <em>win</em>, <em>mac</em>, <em>linux</em>, <em>android</em> or <em>ios</em>.</li>
+<li><strong><em>osVersion</em></strong> (optional): the version of the operating system, using semantic versionning (e.g. <em>10.0</em>, <em>12.5</em>, etc).</li>
+<li><strong><em>host</em></strong> (optional): the host application (e.g. <em>photoshop</em>, <em>blender</em>, <em>aftereffects</em>, <em>maya</em>, etc.).</li>
+<li><strong><em>hostVersion</em></strong> (optional): the version of the host application.</li>
+<li><strong><em>prerelease</em></strong> (optionnal). Add this argument to check for PreRealease versions instead of Released versions, according to the <em>Github</em> release option.</li>
+</ul>
+<h4 id="examples">Examples</h4>
+<ul>
+<li>
+<p><code>http://api.rxlab.io?getVersion&amp;name=Ramses-Client&amp;version=0.2.9&amp;os=linux&amp;osVersion=Ubuntu 20.04&amp;prerelease</code></p>
+</li>
+<li>
+<p><code>http://api.rxlab.io?getVersion&amp;name=Duik&amp;version=16.2.30&amp;os=win&amp;osVersion=11.0&amp;host=aftereffects&amp;hostVersion=22.6</code></p>
+</li>
+</ul>
+<h4 id="reply">Reply</h4>
+<p><em>RxAPI</em> replies with a JSON object.</p>
+<pre><code class="language-json">{
+    &quot;accepted&quot;:true,
+    &quot;success&quot;:true,
+    &quot;message&quot;:&quot;Successful request.&quot;,
+    &quot;update&quot;:false,
+    &quot;name&quot;:&quot;Duik&quot;,
+    &quot;donateURL&quot;:&quot;http:\/\/donate.rxlab.info&quot;,
+    &quot;downloadURL&quot;:&quot;https:\/\/rxlaboratory.org&quot;,
+    &quot;changelogURL&quot;:&quot;https:\/\/rxlaboratory.org&quot;,
+    &quot;version&quot;:&quot;16.2.30&quot;,
+    &quot;newName&quot;:&quot;Duik Bassel.2 Update 30&quot;,
+    &quot;description&quot;:&quot;The thirtieth update of Duik Bassel.2 fixes some auto-rig issues due to changes in the scripting API in After Effects 2021.\r\n\r\nAs always, it is strongly advised to update Duik as soon as you can.\r\n\r\nThe detailed list of what\u2019s new is available in the changelog [here](https:\/\/duik.rxlab.guide\/duik-16-changelog.html).\r\n\r\nHere is the [comprehensive documentation for Duik](https:\/\/duik.rxlab.guide), and here is the [reference for the Duik API](https:\/\/duik.rxlab.io\/).&quot;,
+    &quot;date&quot;:&quot;2021-07-28T17:41:59Z&quot;,
+    &quot;monthlyFund&quot;:973.41,
+    &quot;fundingGoal&quot;:4000
+}
+</code></pre>
+<p>If <code>update</code> is true, that means the script/application has a new update available.</p>
+<h3 id="statistics_1">Statistics</h3>
+<p>Endpoint: <code>http://api.rxlab.io</code></p>
+<h4 id="request_1">Request</h4>
+<ul>
+<li><strong><em>getStats</em></strong></li>
+<li><strong><em>from</em></strong> (optional): the date from which to get the statistics. By default, 30 days before the current date. A string in the form <code>YYYY-MM-DD</code>.</li>
+<li><strong><em>to</em></strong> (optional): the date to which to get the statistics. By default, today. A string in the form <code>YYYY-MM-DD</code>.</li>
+</ul>
+<h4 id="examples_1">Examples</h4>
+<ul>
+<li><code>http://api.rxlab.io?getStats</code></li>
+<li><code>http://api.rxlab.io?getStats&amp;from=2022-07-01</code></li>
+</ul>
+<h4 id="reply_1">Reply</h4>
+<p><em>RxAPI</em> replies with a JSON object, including an array of objects representing the scripts/applications for which it has some statistics.</p>
+<pre><code class="language-json">{
+    &quot;accepted&quot;:true,
+    &quot;success&quot;:true,
+    &quot;message&quot;:&quot;&quot;,
+    &quot;winCount&quot;:3391,
+    &quot;winRatio&quot;:77,
+    &quot;macCount&quot;:1034,
+    &quot;macRatio&quot;:23,
+    &quot;linuxCount&quot;:6,
+    &quot;linuxRatio&quot;:0,
+    &quot;userCount&quot;:4431,
+    &quot;apps&quot;:[
+        {&quot;name&quot;:&quot;Duik&quot;,&quot;count&quot;:1996,&quot;ratio&quot;:45,&quot;host&quot;:&quot;aftereffects&quot;},
+        {&quot;name&quot;:&quot;DuGR&quot;,&quot;count&quot;:1732,&quot;ratio&quot;:39,&quot;host&quot;:&quot;after-effects&quot;},
+        {&quot;name&quot;:&quot;Ramses-Client&quot;,&quot;count&quot;:429,&quot;ratio&quot;:10,&quot;host&quot;:&quot;&quot;},
+        {&quot;name&quot;:&quot;DuSan&quot;,&quot;count&quot;:235,&quot;ratio&quot;:5,&quot;host&quot;:&quot;aftereffects&quot;},
+        {&quot;name&quot;:&quot;DuBlast&quot;,&quot;count&quot;:37,&quot;ratio&quot;:1,&quot;host&quot;:&quot;Blender&quot;},
+        {&quot;name&quot;:&quot;DuFlatnr&quot;,&quot;count&quot;:2,&quot;ratio&quot;:0,&quot;host&quot;:&quot;photoshop&quot;}
+    ]
+}
+</code></pre>
+<ul>
+<li><code>winCount</code>, <code>macCount</code>, <code>linuxCount</code> are the number of users for each OS. To get the number of daily users, divide it by the number of days included in the statistics (30 by default).</li>
+<li><code>winRatio</code>, <code>macRatio</code>, <code>linuxRatio</code> are the ratios in percent.</li>
+<li><code>userCount</code> is the total number of users. To get the number of daily users, divide it by the number of days included in the statistics (30 by default).</li>
+<li>For each app, <code>count</code> is the number of requests, <code>ratio</code> is the ratio between this count and the total number of requests, in percent.</li>
+</ul></div>
+        
+            <div class="nav-footer">
+            <ul>
+                <li class="nav-footer-prev">
+                    <a rel="prev" href="install.html">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li class="nav-footer-next">
+                    <a rel="next" href="quote.html">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        
+    </div>
+
+    
+      <footer class="col-md-12 text-center">
+          
+<div></div>
+
+      </footer>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = "."</script>
+    
+    <script src="js/base.js"></script>
+    <script src="video.js"></script>
+    <script src="meta.js"></script>
+    <script src="collapser.js"></script>
+    <script src="search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>

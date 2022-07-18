@@ -1,3 +1,42 @@
+![META](authors:Nicolas "Duduf" Dufresne;license:GNU-FDL;copyright:2022;updated:2022/07/18)
+
+# Installation guide
+
+## Prerequisites
+
+RxAPI must be installed on a computer with:
+
+- An http web server like Apache
+- PHP 7 or more recent
+- An acces to a mySQL/MariaDB server and a dedicated database.
+
+The recommended configuration is a standard AMP stack (Apache - mySQL - PHP). That's easy to install on any computer, and it should be available with most of web hosting providers, even the cheapest shared hostings.
+
+## Install
+
+1. **Create a database** and add a corresponding **user** to your SQL database.
+
+1. **Download** the server from the [repository](https://github.com/RxLaboratory/RxAPI/releases).
+
+1. **Set up the config file** with needed information (read below for more details).
+
+1. **Upload** the content of the `src` directory to your server.
+
+1. Go to the install URL: `http://yourserver.tld/rxapi/install` for example. The correct URL depends on your host and domain name.
+
+## Use
+
+Most of the data should be automatically served from your *Github* repos.
+
+To check for updates, *RxAPI* will look for the tags in the corresponding *Github* repo to compare the current version with the latest tag. This means the tags and the script/application checking for udpate must use [semantic versionning](https://semver.org/).
+
+To find the correct repository, *RxAPI* will use the user set in the config file, and the name of the script or application checking for update. To override this information for a specific script or application (set an alias to the *Github* repo), you can manually add the information directly in the `rxv_apps` table of the SQL database.
+
+## Config file
+
+Here's the default config file, comments should help you understand what you need to add.
+
+```php
 <?php
     /*
 		RxAPI
@@ -26,7 +65,7 @@
 	// === DEV MODE ===
 	// Activates printing the SQL & PHP errors.
 	// For security reasons, it is important to set this to false in production mode
-	$devMode = true;
+	$devMode = false;
 
 	// ==== SQL SETTINGS ====
 
@@ -34,9 +73,9 @@
 	$sqlHost = "localhost";
 	$sqlPort = 3306;
 	// Database name
-	$sqlDBName = "rxversion";
+	$sqlDBName = "rxapi";
 	// User
-	$sqlUser = "rxversion";
+	$sqlUser = "rxapi";
 	// Password
 	$sqlpassword = "eEGWRk7i";
 	// Table prefix
@@ -82,3 +121,4 @@
 	// List the products to check, leave empty for all. Must be the product ids.
 	$wcProducts = array();
 ?>
+```

@@ -44,7 +44,7 @@
         if ($userRatio < 50) $reply['color'] = "important";
         if ($userRatio > 75) $reply['color'] = "success";
         
-        $reply['message'] = $sponsors . " (" . $userRatio . " %)";
+        $reply['message'] = $sponsors . " (" . $userRatio . "%)";
     }
 
     if ( hasArg( "monthlyIncome") ) {

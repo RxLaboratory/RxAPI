@@ -1,0 +1,45 @@
+site_name: RxAPI
+site_url: http://rxapi.rxlab.io
+repo_url: https://github.com/RxLaboratory/RxAPI
+edit_uri: tree/master/src/docs/
+site_description: The RxAPI comprehensive documentation
+site_author: Nicolas Dufresne and contributors
+copyright: 'Copyright © 2022 <a href="https://rxlaboratory.org" target="_blank">Rainbox Laboratory</a> and <a href="http://duduf.com" target="_blank">Nicolas Dufresne</a>'
+use_directory_urls: false
+theme:
+    name: null
+    custom_dir: 'cinder'
+    colorscheme: zenburn
+extra:
+    collapse_toc: true
+markdown_extensions:
+    - smarty
+    - footnotes
+    - tables
+    - admonition
+    - fenced_code
+    - toc
+    - attr_list
+extra_css:
+    - style.css
+    - video.css
+extra_javascript:
+    - video.js
+    - meta.js
+    - collapser.js
+site_dir: ../docs
+dev_addr: '127.0.0.1:8001'
+nav:
+    - v1.0.0: index.md
+    - Install: install.md
+    - API: api.md
+    - Quote: quote.md
+    - Shields: shields.md
+    - ...:
+        - Changelog: changelog.md
+        - Contact: http://contact.rxlab.info
+        - Chat: http://chat.rxlab.info
+        - Donate: http://donate.rxlab.info
+        - License:
+            - GNU GPLv3: gnu-gpl.md
+            - Documentation license: doc-license.md
