@@ -1,5 +1,5 @@
 <?php
-    $rxVersionVersion = "0.0.1-Dev";
+    $RxAPIVersion = "0.0.1-Dev";
 	$installed = !file_exists("install/index.php");
 
 	if ($devMode)

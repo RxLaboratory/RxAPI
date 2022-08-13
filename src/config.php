@@ -81,4 +81,9 @@
 	$wcToken = "";
 	// List the products to check, leave empty for all. Must be the product ids.
 	$wcProducts = array();
+
+	// ==== Discord Settings ====
+	// Leave empty if you don't use Discord
+	// The token for your discord bot
+	$discordBotToken = "";
 ?>

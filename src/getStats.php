@@ -39,6 +39,7 @@
             $reply['linuxRatio'] = $stats["linuxRatio"];
             $reply['userCount'] = $stats["userCount"];
             $reply['apps'] = $stats["apps"];
+            $reply['languages'] = $stats["languages"];
         }
     }
 ?>

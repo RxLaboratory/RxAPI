@@ -115,6 +115,7 @@
         $osVersion = getArg("osVersion");
         $host = getArg("host");
         $hostVersion = getArg("hostVersion");
+        $languageCode = getArg("languageCode", "unknown");
         $prerelease = hasArg("prerelease");
         
         if ( checkArgs( array( $name, $version ) ) )
@@ -193,21 +194,23 @@
             }
 
             // Update stats
-            $rep = $db->prepare( "INSERT INTO {$statsTable} (`appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`)
+            $rep = $db->prepare( "INSERT INTO {$statsTable} (`appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`, `languageCode`)
                 VALUES (
                     :name,
                     :version,
                     :os,
                     :osVersion,
                     :host,
-                    :hostVersion
-                );");
+                    :hostVersion,
+                    :languageCode
+                );" );
             $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
             $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
             $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
             $rep->bindValue(':osVersion', trim($osVersion), PDO::PARAM_STR);
             $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
             $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
+            $rep->bindValue(':languageCode', trim($languageCode), PDO::PARAM_STR);
             $rep->execute();
             $rep->closeCursor();
             
