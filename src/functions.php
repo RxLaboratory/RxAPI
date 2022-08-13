@@ -592,6 +592,11 @@
                 return $b["count"] - $a["count"];
             });
 
+            // sort languages
+            usort($allLanguages, function($a, $b) {
+                return $b["count"] - $a["count"];
+            });
+
             $stats['winCount'] = $winCount;
             $stats['winRatio'] = $winRatio;
             $stats['macCount'] = $macCount;
