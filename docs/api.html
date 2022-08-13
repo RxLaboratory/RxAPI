@@ -61,7 +61,7 @@
             <!-- Main title -->
 
             
-              <a class="navbar-brand" href="index.html">RxAPI</a>
+              <a class="navbar-brand" href=".">RxAPI</a>
             
         </div>
 
@@ -302,6 +302,7 @@
 <li>Script / Application <strong>name and version</strong></li>
 <li><strong>OS</strong> and OS version</li>
 <li><strong>Host application</strong> and its version (if any)</li>
+<li><strong>Language code</strong></li>
 <li>The <strong>date</strong> of the request</li>
 </ul>
 <p>We may add geographical data later (such as the country).</p>
@@ -324,6 +325,7 @@
 <li><strong><em>osVersion</em></strong> (optional): the version of the operating system, using semantic versionning (e.g. <em>10.0</em>, <em>12.5</em>, etc).</li>
 <li><strong><em>host</em></strong> (optional): the host application (e.g. <em>photoshop</em>, <em>blender</em>, <em>aftereffects</em>, <em>maya</em>, etc.).</li>
 <li><strong><em>hostVersion</em></strong> (optional): the version of the host application.</li>
+<li><strong><em>languageCode</em></strong> (optional): the code for the current locale of the script / application (e.g. &ldquo;en&rdquo;, &ldquo;es&rdquo;, &ldquo;fr&rdquo;&hellip;)</li>
 <li><strong><em>prerelease</em></strong> (optionnal). Add this argument to check for PreRealease versions instead of Released versions, according to the <em>Github</em> release option.</li>
 </ul>
 <h4 id="examples">Examples</h4>
@@ -388,6 +390,10 @@
         {&quot;name&quot;:&quot;DuSan&quot;,&quot;count&quot;:235,&quot;ratio&quot;:5,&quot;host&quot;:&quot;aftereffects&quot;},
         {&quot;name&quot;:&quot;DuBlast&quot;,&quot;count&quot;:37,&quot;ratio&quot;:1,&quot;host&quot;:&quot;Blender&quot;},
         {&quot;name&quot;:&quot;DuFlatnr&quot;,&quot;count&quot;:2,&quot;ratio&quot;:0,&quot;host&quot;:&quot;photoshop&quot;}
+    ],
+    &quot;languages&quot;: [
+        {&quot;name&quot;:&quot;English&quot;,&quot;code&quot;:&quot;en&quot;,&quot;count&quot;:800,&quot;ratio&quot;:80},
+        {&quot;name&quot;:&quot;Français&quot;,&quot;code&quot;:&quot;fr&quot;,&quot;count&quot;:200,&quot;ratio&quot;:20}
     ]
 }
 </code></pre>

@@ -26,6 +26,7 @@ For each request from a script or application, *RxAPI* stores the following info
 - Script / Application **name and version**
 - **OS** and OS version
 - **Host application** and its version (if any)
+- **Language code**
 - The **date** of the request
 
 We may add geographical data later (such as the country).
@@ -59,6 +60,7 @@ Endpoint: `http://api.rxlab.io`
 - ***osVersion*** (optional): the version of the operating system, using semantic versionning (e.g. *10.0*, *12.5*, etc).
 - ***host*** (optional): the host application (e.g. *photoshop*, *blender*, *aftereffects*, *maya*, etc.).
 - ***hostVersion*** (optional): the version of the host application.
+- ***languageCode*** (optional): the code for the current locale of the script / application (e.g. "en", "es", "fr"...)
 - ***prerelease*** (optionnal). Add this argument to check for PreRealease versions instead of Released versions, according to the *Github* release option.
 
 #### Examples
@@ -130,6 +132,10 @@ Endpoint: `http://api.rxlab.io`
         {"name":"DuSan","count":235,"ratio":5,"host":"aftereffects"},
         {"name":"DuBlast","count":37,"ratio":1,"host":"Blender"},
         {"name":"DuFlatnr","count":2,"ratio":0,"host":"photoshop"}
+    ],
+    "languages": [
+        {"name":"English","code":"en","count":800,"ratio":80},
+        {"name":"Français","code":"fr","count":200,"ratio":20}
     ]
 }
 ```
