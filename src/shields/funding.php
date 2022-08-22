@@ -10,14 +10,17 @@
 
         $stats = getStats(date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))), date("Y-m-d H:i:s"));
 
-        $numUsers = round($stats["userCount"] / 30 + 8000);
+        $numUsers = round($stats["userCount"] / 30);
+        // Add Duik 15 estimated users
+        $numUsers += 8000;
+
         $reply['message'] = strval( $numUsers );
     }
 
     if ( hasArg( "numBackers" ) ) {
         $accepted = true;
 
-        $reply['label'] = "sponsors";
+        $reply['label'] = "Supporters";
         $reply['message'] = "none";
         $reply['isError'] = false;
         $reply['color'] = "informational";
@@ -44,7 +47,7 @@
         if ($userRatio < 50) $reply['color'] = "important";
         if ($userRatio > 75) $reply['color'] = "success";
         
-        $reply['message'] = $sponsors . " (" . $userRatio . "%)";
+        $reply['message'] = $sponsors . " (" . $userRatio . " %)";
     }
 
     if ( hasArg( "monthlyIncome") ) {
@@ -70,7 +73,7 @@
 
         if ($fundingGoal > 0) {
             $ratio = $fund / $fundingGoal * 100;
-            $reply['message'] =  "$" . strval( (int)$fund ) . " (" .  strval((int)$ratio) . "%)";
+            $reply['message'] =  "$" . strval( (int)$fund ) . " (" .  strval((int)$ratio) . " %)";
             if ($ratio < 25) $reply['color'] = "critical";
             if ($ratio < 50) $reply['color'] = "important";
             if ($ratio > 75) $reply['color'] = "success";
