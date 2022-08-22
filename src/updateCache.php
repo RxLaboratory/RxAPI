@@ -1,10 +1,10 @@
 <?php
     /*
-		RxVersion
+		RxAPI
         
         This program is licensed under the GNU General Public License.
 
-        Copyright (C) 2020-2022 Nicolas Dufresne and Contributors.
+        Copyright (C) 20202-2021 Nicolas Dufresne and Contributors.
 
         This program is free software;
         you can redistribute it and/or modify it
@@ -21,34 +21,17 @@
         If not, see http://www.gnu.org/licenses/.
 	*/
 
-    // Edit this configuration file before running the install script at /install/index.php
-    
-    //configuration and init 
-	include ("config.php");
-	include ("functions.php");
-    include ("init.php");
-
-    //prepare reply
-	include ("reply.php");
-
-    //connect to database
-    include('db.php');
-
-    if ($installed)
-    {
-        include ("getVersion.php");
-        include ("getStats.php");
-        include ("updateCache.php");
-
-        if (!$reply["accepted"])
-        {
-            $reply["message"] = "Unknown query";
-        }
+    if (hasArg("ghBackers")) ghBackers(true);
+    if (hasArg("ghIncome")) ghIncome(true);
+    if (hasArg("patreonBackers")) patreonBackers(true);
+    if (hasArg("patreonIncome")) patreonIncome(true);
+    if (hasArg("wpBackers")) wpBackers(true);
+    if (hasArg("wpIncome")) wpIncome(true);
+    if (hasArg("wcBackers")) wpIncome(true);
+    if (hasArg("wcIncome")) wcIncome(true);
+    if (hasArg("getStats")) {
+        $from = date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y")));
+        $to = date("Y-m-d H:i:s");
+        getStats($from, $to, true);
     }
-    else
-    {
-        $reply["message"] = "This RxVersion server is not installed yet.";
-    }
-    
-	echo json_encode($reply);
 ?>
