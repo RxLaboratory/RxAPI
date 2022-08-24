@@ -21,23 +21,23 @@
         If not, see http://www.gnu.org/licenses/.
 	*/
 
-    //configuration and init 
-	include ("../config.php");
-    include ("../functions.php");
-    include ("../init.php");
-    
+    $__ROOT__ = dirname(dirname(__FILE__));
+    require_once($__ROOT__."/config.php");
+    require_once($__ROOT__."/functions.php");
+    require_once($__ROOT__."/init.php");
+   
     //prepare reply
-	include ("reply.php");
+	require_once ($__ROOT__."/shields/reply.php");
 
     //connect to database
-    include('../db.php');
+    require_once($__ROOT__."/db.php");
     $accepted = false;
 
     if ($installed)
     {
-        include ("size.php");
-        include ("stats.php");
-        include ("funding.php");
+        include ($__ROOT__."/shields/size.php");
+        include ($__ROOT__."/shields/stats.php");
+        include ($__ROOT__."/shields/funding.php");
 
         if (!$accepted)
         {

@@ -1,4 +1,5 @@
 <?php
+    require_once($__ROOT__."/functions.php");
 
     if (hasArg( "size" ))
     {

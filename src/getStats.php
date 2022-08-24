@@ -1,6 +1,8 @@
 <?php
+    require_once($__ROOT__."/functions.php");
+    require_once($__ROOT__."/reply.php");
     /*
-		RxAPI
+        RxAPI
         
         This program is licensed under the GNU General Public License.
 
@@ -19,10 +21,10 @@
 
         You should have received a copy of the *GNU General Public License* along with this program.
         If not, see http://www.gnu.org/licenses/.
-	*/
+    */
 
     if (hasArg("getStats"))
-	{
+    {
         $reply["accepted"] = true;
 
         $from = getArg("from", date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y"))));

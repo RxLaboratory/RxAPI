@@ -1,4 +1,6 @@
 <?php
+    require_once($__ROOT__."/config.php");
+    require_once($__ROOT__."/reply.php");
 
     // language codes / language names associative array
     // Generated from https://github.com/unicode-org/cldr
@@ -108,22 +110,25 @@
     {
         global $reply;
         $reply["accepted"] = true;
-		$reply["query"] = $queryName;
+        $reply["query"] = $queryName;
     }
 
     // === CACHE ===
     function getCache( $name ) {
-        global $cacheTimeout;
+        global $cacheTimeout, $__ROOT__;
 
         // Create the cache folder
-        if (!is_dir("cache")) mkdir("cache", 0744);
+        if (!is_dir($__ROOT__."/cache")) mkdir($__ROOT__."/cache", 0744);
 
         // Get file if it exists
-        $cacheFile = "cache/" . $name;
+        $cacheFile = "{$__ROOT__}/cache/{$name}";
         $content = "";
-        $timedOut = time() - $cacheTimeout < filemtime($cacheFile);
+        $timedOut = true;
+
+    clearstatcache();
 
         if (file_exists($cacheFile)) {
+            $timedOut = time() - $cacheTimeout > filemtime($cacheFile);
             $cached = fopen($cacheFile, 'r');
             if ($cached !== false) {
                 $content = fread($cached, filesize($cacheFile));
@@ -137,15 +142,15 @@
 
         // If the cache have timed out, trigger an update
         if ($timedOut) {
-            $url = "updateCache.php?{$name}";
-
+            $url = "http://".$_SERVER['SERVER_NAME']."/updateCache.php?{$name}";
+            
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_USERAGENT, 'RxAPI/2.0 (PHP)');
             curl_setopt($curl, CURLOPT_HEADER, 0);
-            curl_setopt($curl,  CURLOPT_RETURNTRANSFER, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
             curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 100);
             curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 100);
             curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
             curl_exec($curl);
@@ -156,11 +161,13 @@
     }
 
     function saveCache( $name, $content ) {
+        global $__ROOT__;
+
         // Create the cache folder
-        if (!is_dir("cache")) mkdir("cache", 0744);
+        if (!is_dir($__ROOT__."/cache")) mkdir($__ROOT__."/cache", 0744);
 
         // Get file
-        $cacheFile = "cache/" . $name;
+        $cacheFile = "{$__ROOT__}/cache/{$name}";
 
         // Cache the contents to a cache file
         $cached = fopen($cacheFile, 'w');
@@ -216,9 +223,10 @@
     }
 
     function ghBackers($skipCache = false) {
-
-        $cached = getCache( "ghBackers" );
-        if ($cached != "" && !$skipCache) return (int)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "ghBackers" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $ghUser;
 
@@ -246,8 +254,10 @@
     }
 
     function ghIncome($skipCache = false) {
-        $cached = getCache( "ghIncome" );
-        if ($cached != "" && !$skipCache) return (float)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "ghIncome" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $ghUser;
 
@@ -293,8 +303,10 @@
     }
 
     function patreonBackers($skipCache = false) {
-        $cached = getCache( "patreonBackers" );
-        if ($cached != "" && !$skipCache) return (int)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "patreonBackers" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $patreonToken;
         // Add Patreon count
@@ -311,8 +323,10 @@
     }
 
     function patreonIncome($skipCache = false) {
-        $cached = getCache( "patreonIncome" );
-        if ($cached != "" && !$skipCache) return (float)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "patreonIncome" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $patreonToken;
         // Add Patreon count
@@ -347,8 +361,10 @@
     }
 
     function wpBackers($skipCache = false) {
-        $cached = getCache( "wpBackers" );
-        if ($cached != "" && !$skipCache) return (int)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "wpBackers" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $wpUsername;
         global $wpPassword;
@@ -376,8 +392,10 @@
     }
 
     function wpIncome($skipCache = false) {
-        $cached = getCache( "wpIncome" );
-        if ($cached != "" && !$skipCache) return (float)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "wpIncome" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $wpUsername;
         global $wpPassword;
@@ -447,8 +465,10 @@
     }
 
     function wcBackers($skipCache = false) {
-        $cached = getCache( "wcBackers" );
-        if ($cached != "" && !$skipCache) return (int)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "wcBackers" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $wcToken;
         global $wcUsername;
@@ -484,8 +504,10 @@
     }
 
     function wcIncome($skipCache = false) {
-        $cached = getCache( "wcIncome" );
-        if ($cached != "" && !$skipCache) return (float)$cached;
+        if (!$skipCache) {
+            $cached = getCache( "wcIncome" );
+            if ($cached != "") return (int)$cached;
+        }
 
         global $wcToken;
         global $wcUsername;
@@ -523,8 +545,10 @@
 
     // === STATS ===
     function getStats($from, $to, $skipCache = false) {
-        $cached = getCache( "getStats" );
-        if ($cached != "" && !$skipCache) return json_decode($cached, true);
+        if (!$skipCache) {
+            $cached = getCache( "getStats" );
+            if ($cached != "") return json_decode($cached, true);
+        }
 
         global $db, $statsTable, $languageNames;
 

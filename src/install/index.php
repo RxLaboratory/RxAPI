@@ -9,9 +9,10 @@
 
     echo ( "Connecting to the database...<br />" );
 
-    include('../config.php');
-    include('../functions.php');
-    include('../db.php');
+    $__ROOT__ = dirname(dirname(__FILE__));
+    require_once($__ROOT__."/config.php");
+    require_once($__ROOT__."/functions.php");
+    require_once($__ROOT__."/db.php");
 
     echo ( "Database found and working!<br />" );
 

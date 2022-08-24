@@ -1,6 +1,6 @@
-<?php
+<?php    
     /*
-		RxAPI
+        RxAPI
         
         This program is licensed under the GNU General Public License.
 
@@ -19,19 +19,26 @@
 
         You should have received a copy of the *GNU General Public License* along with this program.
         If not, see http://www.gnu.org/licenses/.
-	*/
-
+    */
+    
+    $__ROOT__ = dirname(__FILE__);
+    require_once ("config.php");
+    require_once ("functions.php");
+    require_once ("init.php");
+    //connect to database
+    require_once('db.php');
+        
     if (hasArg("ghBackers")) ghBackers(true);
-    if (hasArg("ghIncome")) ghIncome(true);
-    if (hasArg("patreonBackers")) patreonBackers(true);
-    if (hasArg("patreonIncome")) patreonIncome(true);
-    if (hasArg("wpBackers")) wpBackers(true);
-    if (hasArg("wpIncome")) wpIncome(true);
-    if (hasArg("wcBackers")) wpIncome(true);
-    if (hasArg("wcIncome")) wcIncome(true);
-    if (hasArg("getStats")) {
-        $from = date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y")));
-        $to = date("Y-m-d H:i:s");
-        getStats($from, $to, true);
+    else if (hasArg("ghIncome")) ghIncome(true);
+    else if (hasArg("patreonBackers")) patreonBackers(true);
+    else if (hasArg("patreonIncome")) patreonIncome(true);
+    else if (hasArg("wpBackers")) wpBackers(true);
+    else if (hasArg("wpIncome")) wpIncome(true);
+    else if (hasArg("wcBackers")) wcBackers(true);
+    else if (hasArg("wcIncome")) wcIncome(true);
+    else if (hasArg("getStats")) {
+    $from = date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y")));
+    $to = date("Y-m-d H:i:s");
+    getStats($from, $to, true);
     }
 ?>

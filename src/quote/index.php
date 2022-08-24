@@ -22,9 +22,10 @@
 	*/
 
     //configuration and init 
-	include ("../config.php");
-    include ("../functions.php");
-    include ("../init.php");
+	$__ROOT__ = dirname(dirname(__FILE__));
+    require_once($__ROOT__."/config.php");
+    require_once($__ROOT__."/functions.php");
+    require_once($__ROOT__."/init.php");
 
     // Parse quotes
     $quotesFile = fopen("quotes.json", "r") or die("Quotes not found.");

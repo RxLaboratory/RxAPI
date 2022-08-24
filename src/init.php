@@ -1,6 +1,7 @@
 <?php
-    $RxAPIVersion = "1.2.0";
-	$installed = !file_exists("install/index.php");
+	require_once($__ROOT__."/config.php");
+    $RxAPIVersion = "1.2.1";
+	$installed = !file_exists($__ROOT__."/install/index.php");
 
 	if ($devMode)
 	{

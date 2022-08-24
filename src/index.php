@@ -1,6 +1,6 @@
 <?php
     /*
-		RxVersion
+        RxVersion
         
         This program is licensed under the GNU General Public License.
 
@@ -19,17 +19,17 @@
 
         You should have received a copy of the *GNU General Public License* along with this program.
         If not, see http://www.gnu.org/licenses/.
-	*/
+    */
 
-    // Edit this configuration file before running the install script at /install/index.php
+    $__ROOT__ = dirname(__FILE__);
     
     //configuration and init 
-	include ("config.php");
-	include ("functions.php");
-    include ("init.php");
+    require_once ("config.php");
+    require_once ("functions.php");
+    require_once ("init.php");
 
     //prepare reply
-	include ("reply.php");
+    require_once ("reply.php");
 
     //connect to database
     include('db.php');
@@ -38,7 +38,6 @@
     {
         include ("getVersion.php");
         include ("getStats.php");
-        include ("updateCache.php");
 
         if (!$reply["accepted"])
         {
@@ -50,5 +49,5 @@
         $reply["message"] = "This RxVersion server is not installed yet.";
     }
     
-	echo json_encode($reply);
+    echo json_encode($reply);
 ?>
