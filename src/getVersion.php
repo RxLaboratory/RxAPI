@@ -224,6 +224,8 @@
             $fund += patreonIncome();
             // WOOCOMMERCE
             $fund += wcIncome(); 
+            // STRIPE
+            $fund += stripeIncome(); 
 
             $reply['monthlyFund'] = $fund;
             $reply['fundingGoal'] = $fundingGoal;

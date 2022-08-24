@@ -340,16 +340,17 @@
         return 0;
     }
 
-    // === WORDPRESS MEMBERSHIP ===
-    function wpRequest( $url ) {
-        global $wpUsername;
-        global $wpPassword;
+    // === STRIPE ===
+
+    function stripeRequest( $url )
+    {
+        global $stripeKey;
 
         $userAgent = 'RxAPI/2.0 (PHP)';
 
         $ch = curl_init( $url );
         curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
-        curl_setopt($ch, CURLOPT_USERPWD, "{$wpUsername}:{$wpPassword}");
+        curl_setopt($ch, CURLOPT_USERPWD, "{$stripeKey}:");
         curl_setopt($ch, CURLOPT_URL, $url);
         // Set so curl_exec returns the result instead of outputting it.
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -359,87 +360,71 @@
 
         return $response;
     }
-
-    function wpBackers($skipCache = false) {
+    
+    function stripeSubscriptions($skipCache = false)
+    {
         if (!$skipCache) {
-            $cached = getCache( "wpBackers" );
+            $cached = getCache( "stripeSubscriptions" );
             if ($cached != "") return (int)$cached;
         }
-
-        global $wpUsername;
-        global $wpPassword;
-
-        if ($wpUsername == "" || $wpPassword == "") return 0;
-
+        
         $count = 0;
-
-        $members = wpRequest("https://rxlaboratory.org/wp-json/wp/v2/users?roles=subscriber,customer");
-        $members = json_decode($members, true);
-
-        // For each member, check the membership
-        foreach( $members as $member ) {
-            $id = $member['id'];
-            $level = wpRequest("https://rxlaboratory.org/wp-json/pmpro/v1/get_membership_level_for_user?user_id={$id}");
-            $level = json_decode($level, true);
-            if ($level) {
-                $enddate = (int)$level["enddate"];
-                if ( $enddate == 0 || $enddate > time() ) $count++;
-            }
+        $has_more = true;
+        $prevId = "";
+        while($has_more)
+        {
+            $url = "https://api.stripe.com/v1/subscriptions?limit=100";
+            if ($prevId != "") $url = $url . "&starting_after={$prevId}";
+            $subscriptions = stripeRequest( $url );
+            $subscriptions = json_decode($subscriptions, true);
+            if (!$subscriptions) break;
+            if (isset($subscriptions['has_more'])) $has_more = $subscriptions['has_more'];
+            else $has_more = false;
+            if (!isset($subscriptions['data'])) break;
+            $count = $count + count($subscriptions['data']);
+            $prevId = end($subscriptions['data'])['id'];
         }
-
-        saveCache("wpBackers", $count);
+        
+        saveCache("stripeSubscriptions", $count);
         return $count;
     }
-
-    function wpIncome($skipCache = false) {
+    
+    function stripeIncome($skipCache = false)
+    {
         if (!$skipCache) {
-            $cached = getCache( "wpIncome" );
+            $cached = getCache( "stripeIncome" );
             if ($cached != "") return (int)$cached;
         }
-
-        global $wpUsername;
-        global $wpPassword;
-
-        if ($wpUsername == "" || $wpPassword == "") return 0;
-
-        $fund = 0;
-
-        $members = wpRequest("https://rxlaboratory.org/wp-json/wp/v2/users?roles=subscriber,customer");
-        $members = json_decode($members, true);
-
-        // For each member, check the membership
-        foreach( $members as $member ) {
-            $id = $member['id'];
-            $level = wpRequest("https://rxlaboratory.org/wp-json/pmpro/v1/get_membership_level_for_user?user_id={$id}");
+        
+        $income = 0;
+        $has_more = true;
+        $prevId = "";
+        $monthStart = strtotime("first day of");
+        while($has_more)
+        {
+            $data = "limit=100&created[gte]={$monthStart}";
+            if ($prevId != "") $data = $data . "&starting_after={$prevId}";
+            $url = "https://api.stripe.com/v1/balance_transactions?{$data}";
+            $transactions = stripeRequest( $url );
+            $transactions = json_decode($transactions, true);
+            if (!$transactions) break;
             
-            $level = json_decode($level, true);
-            if ($level) {
-                $enddate = (int)$level["enddate"];
-                if ( $enddate > 0 && $enddate < time() ) continue;
-
-                $amount = (float)$level["billing_amount"];
-                $cycle_num = (int)$level["cycle_number"];
-                $cycle_period = $level["cycle_period"];
-                if ($cycle_num == 0) continue;
-
-                if ($cycle_period == "Day") {
-                    $amount = (30 / $cycle_num) * $amount;
-                }
-                else if ($cycle_period == "Week") {
-                    $amount = (4 / $cycle_num) * $amount;
-                }
-                else if ($cycle_period == "Month") {
-                    $amount = $amount / $cycle_num;
-                }
-                else if ($cycle_period == "Year") {
-                    $amount = $amount / (12 * $cycle_num);
-                }
-
-                $fund += $amount;
+            if (isset($transactions['has_more'])) $has_more = $transactions['has_more'];
+            else $has_more = false;
+            
+            if (!isset($transactions['data'])) break;
+            foreach( $transactions['data'] as $transaction)
+            {
+                $amount = $transaction['net'];
+                if ($amount < 0) continue;
+                $income = $income + $amount / 100;
             }
+            $prevId = end($transactions['data'])['id'];
         }
-        saveCache("wpIncome", $fund);
-        return $fund;
+        
+        $income = round($income);
+        saveCache("stripeIncome", $income);
+        return $income;
     }
 
     // === WOOCOMMERCE ===

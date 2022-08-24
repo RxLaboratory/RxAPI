@@ -64,13 +64,11 @@
 	// And add the Creator's access token here
 	$patreonToken = "";
 
-	// ==== WordPress Settings ====
-	// Leave empty if you don't use WordPress
-	// Otherwise, create an application password in your WordPress user profile
-	// Your username
-	$wpUsername = "";
-	// The application password
-	$wpPassword = "";
+	// ==== Stripe Settings ====
+	// Leave empty if you don't use Stripe
+	// Otherwise, get a Strip API Key,
+	// And add it here
+	$stripeKey = "";
 
 	// ==== WooCommerce Settings ====
 	// Leave empty if you don't use WooCommerce

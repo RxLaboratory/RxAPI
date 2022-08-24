@@ -34,8 +34,8 @@
         // GET PATREON PATRONS
         $sponsors += patreonBackers();
 
-        // GET WORDPRESS MEMBERS
-        $sponsors += wpBackers();
+        // GET STRIPE SUBSCRIPTIONS
+        $sponsors += stripeSubscriptions();
 
         // GET WOOCOMMERCE ORDERS
         $sponsors += wcBackers();
@@ -67,8 +67,8 @@
         // PATREON
         $fund += patreonIncome();
 
-        // WORDPRESS
-        $fund += wpIncome();
+        // STRIPE
+        $fund += stripeIncome();
 
         // WOOCOMMERCE
         $fund += wcIncome();      

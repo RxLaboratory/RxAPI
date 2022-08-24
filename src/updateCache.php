@@ -32,10 +32,10 @@
     else if (hasArg("ghIncome")) ghIncome(true);
     else if (hasArg("patreonBackers")) patreonBackers(true);
     else if (hasArg("patreonIncome")) patreonIncome(true);
-    else if (hasArg("wpBackers")) wpBackers(true);
-    else if (hasArg("wpIncome")) wpIncome(true);
     else if (hasArg("wcBackers")) wcBackers(true);
     else if (hasArg("wcIncome")) wcIncome(true);
+    else if (hasArg("stripeSubscriptions")) stripeSubscriptions(true);
+    else if (hasArg("stripeIncome")) stripeIncome(true);
     else if (hasArg("getStats")) {
     $from = date("Y-m-d H:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y")));
     $to = date("Y-m-d H:i:s");
