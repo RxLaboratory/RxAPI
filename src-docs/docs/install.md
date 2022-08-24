@@ -73,9 +73,9 @@ Here's the default config file, comments should help you understand what you nee
 	$sqlHost = "localhost";
 	$sqlPort = 3306;
 	// Database name
-	$sqlDBName = "rxapi";
+	$sqlDBName = "rxversion";
 	// User
-	$sqlUser = "rxapi";
+	$sqlUser = "rxversion";
 	// Password
 	$sqlpassword = "eEGWRk7i";
 	// Table prefix
@@ -103,13 +103,11 @@ Here's the default config file, comments should help you understand what you nee
 	// And add the Creator's access token here
 	$patreonToken = "";
 
-	// ==== WordPress Settings ====
-	// Leave empty if you don't use WordPress
-	// Otherwise, create an application password in your WordPress user profile
-	// Your username
-	$wpUsername = "";
-	// The application password
-	$wpPassword = "";
+	// ==== Stripe Settings ====
+	// Leave empty if you don't use Stripe
+	// Otherwise, get a Strip API Key,
+	// And add it here
+	$stripeKey = "";
 
 	// ==== WooCommerce Settings ====
 	// Leave empty if you don't use WooCommerce
@@ -120,5 +118,10 @@ Here's the default config file, comments should help you understand what you nee
 	$wcToken = "";
 	// List the products to check, leave empty for all. Must be the product ids.
 	$wcProducts = array();
+
+	// ==== Discord Settings ====
+	// Leave empty if you don't use Discord
+	// The token for your discord bot
+	$discordBotToken = "";
 ?>
 ```

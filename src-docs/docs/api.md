@@ -16,7 +16,7 @@ The update information is pulled from **github repositories**, using the *releas
 
 - **Github Sponsors**
 - WordPress: **WooCommerce**
-- WordPress: **Paid Memberships Pro**
+- **Stripe subscriptions**
 - **Patreon**
 
 ### Statistics

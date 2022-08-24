@@ -1,5 +1,11 @@
 # RxAPI Changelog
 
+## ▹ 1.3.0
+
+- Fixed a few caching bugs
+- Removed WooCommerce Paid Memberships Pro support because of performance issues
+- Added support for Stripe Subscriptions and income
+
 ## ▹ 1.2.0
 
 Performance improvements.

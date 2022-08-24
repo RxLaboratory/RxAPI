@@ -26,7 +26,7 @@
 	// === DEV MODE ===
 	// Activates printing the SQL & PHP errors.
 	// For security reasons, it is important to set this to false in production mode
-	$devMode = true;
+	$devMode = false;
 
 	// ==== SQL SETTINGS ====
 

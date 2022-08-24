@@ -20,7 +20,7 @@ It checks the Github releases of the corresponding repo to see if newer versions
 - Shows funding status and goals:
     - Retrieves *Github Sponsors*
     - Retrieves Patrons from *Patreon*
-    - Retrieves Membership through Wordpress *Paid Memberships Pro* plugin.
+    - Retrieves Stripe Subscriptions and income.
     - Retrieves Products sold through *WooCommerce*
 - Endpoints for use with [shields.io](https://shields.io)
 - Keeps anonymous statistics: number of version checks, OS, version of the OS, etc.
