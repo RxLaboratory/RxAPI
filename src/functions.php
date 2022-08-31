@@ -603,7 +603,7 @@
                     }
                 }
 
-                $countryName = $v['country'];
+                $countryName = strtoupper($v['country']);
 
                 if ($countryName != "unknown" && $countryName != "") {
                     $countryCount++;
