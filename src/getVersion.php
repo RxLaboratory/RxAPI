@@ -196,8 +196,11 @@
                 $reply['message'] = "It seems this is an unknown software or no public version has been published yet.";
             }
 
+            $country = getCountry();
+            if ($country =="") $country = "unknown";
+
             // Update stats
-            $rep = $db->prepare( "INSERT INTO {$statsTable} (`appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`, `languageCode`)
+            $rep = $db->prepare( "INSERT INTO {$statsTable} (`appName`, `version`, `os`, `osVersion`, `host`, `hostVersion`, `languageCode`, `country`)
                 VALUES (
                     :name,
                     :version,
@@ -205,8 +208,10 @@
                     :osVersion,
                     :host,
                     :hostVersion,
-                    :languageCode
+                    :languageCode,
+                    :country
                 );" );
+
             $rep->bindValue(':name', trim($name), PDO::PARAM_STR);
             $rep->bindValue(':version', trim($version), PDO::PARAM_STR);
             $rep->bindValue(':os', trim($os), PDO::PARAM_STR);
@@ -214,6 +219,7 @@
             $rep->bindValue(':host', trim($host), PDO::PARAM_STR);
             $rep->bindValue(':hostVersion', trim($hostVersion), PDO::PARAM_STR);
             $rep->bindValue(':languageCode', trim($languageCode), PDO::PARAM_STR);
+            $rep->bindValue(':country', trim($country), PDO::PARAM_STR);
             $rep->execute();
             $rep->closeCursor();
             

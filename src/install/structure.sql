@@ -27,7 +27,8 @@ CREATE TABLE `rxv_stats` (
   `host` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `hostVersion` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `languageCode` varchar(10) COLLATE utf8_unicode_ci DEFAULT "unknown"
+  `languageCode` varchar(10) COLLATE utf8_unicode_ci DEFAULT "unknown",
+  `country` varchar(255) COLLATE utf8_unicode_ci DEFAULT "unknown"
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `rxv_versions`;

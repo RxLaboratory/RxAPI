@@ -1,6 +1,7 @@
 <?php
     require_once($__ROOT__."/config.php");
     require_once($__ROOT__."/reply.php");
+    require_once($__ROOT__."/whois/whois.main.php");
 
     // language codes / language names associative array
     // Generated from https://github.com/unicode-org/cldr
@@ -125,7 +126,7 @@
         $content = "";
         $timedOut = true;
 
-    clearstatcache();
+        clearstatcache();
 
         if (file_exists($cacheFile)) {
             $timedOut = time() - $cacheTimeout > filemtime($cacheFile);
@@ -558,12 +559,15 @@
         $apps = array();
         $languageCount = 0;
         $languages = array();
+        $countryCount = 0;
+        $countries = array();
 
         if ($ok)
         {
             $stats = array();
 
             while ($v = $rep->fetch()) {
+            	
                 if($v['os'] == 'win') $winCount++;
                 else if($v['os'] == 'mac') $macCount++;
                 else if($v['os'] == 'linux') $linuxCount++;
@@ -598,6 +602,24 @@
                         $languages[$lang]['count']++;
                     }
                 }
+
+                $countryName = $v['country'];
+
+                if ($countryName != "unknown" && $countryName != "") {
+                    $countryCount++;
+                    if (!isset($countries[$countryName]))
+                    {
+                        $country = array();
+                        $country['name'] = $countryName;
+                        $country['count'] = 1;
+                        $country['ratio'] = 0;
+                        $countries[$countryName] = $country;
+                    }
+                    else
+                    {
+                        $country['count']++;
+                    }
+                }
             }
             $rep->closeCursor();
 
@@ -614,7 +636,13 @@
             $allLanguages = array();
             foreach($languages as $language) {
                 $language['ratio'] = round($language['count'] / $languageCount * 100);
-                $allLanguages[] = $language;                
+                $allLanguages[] = $language;
+            }
+
+            $allCountries = array();
+            foreach($countries as $country) {
+                $country['ratio'] = round($country['count'] / $countryCount * 100);
+                $allCountries[] = $country;
             }
 
             // sort apps
@@ -627,6 +655,11 @@
                 return $b["count"] - $a["count"];
             });
 
+            // sort countries
+            usort($allCountries, function($a, $b) {
+                return $b["count"] - $a["count"];
+            });
+
             $stats['winCount'] = $winCount;
             $stats['winRatio'] = $winRatio;
             $stats['macCount'] = $macCount;
@@ -636,7 +669,8 @@
             $stats['userCount'] = $userCount;
             $stats['apps'] = $allApps;
             $stats['languages'] = $allLanguages;
-
+            $stats['countries'] = $allCountries;
+            
             saveCache("getStats", json_encode($stats));
 
             return $stats;
@@ -645,4 +679,26 @@
         return false;
     }
     
+
+    // === GEO LOCATION ===
+    function getCountry($ip = null)
+    {
+        global $_SERVER, $RxAPIVersion;
+		
+		if ( is_null( $ip ) ) {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+
+        $whois = new Whois();
+        $whois->deep_whois = false;
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $data = $whois->Lookup($ip);
+        
+        if(!isset( $data['regrinfo'] )) return "unknown";
+        if(!isset( $data['regrinfo']['network'] )) return "unknown";
+        if(!isset( $data['regrinfo']['network']['country'] )) return "unknown";
+
+	    $country = explode("#", $data['regrinfo']['network']['country'])[0];
+        return trim($country);
+    }
 ?>

@@ -42,6 +42,7 @@
             $reply['userCount'] = $stats["userCount"];
             $reply['apps'] = $stats["apps"];
             $reply['languages'] = $stats["languages"];
+            $reply['countries'] = $stats["countries"];
         }
     }
 ?>
