@@ -2,6 +2,7 @@
     require_once($__ROOT__."/config.php");
     require_once($__ROOT__."/reply.php");
     require_once($__ROOT__."/whois/whois.main.php");
+    require($__ROOT__."/geoip2.phar");
 
     // language codes / language names associative array
     // Generated from https://github.com/unicode-org/cldr
@@ -683,21 +684,32 @@
     // === GEO LOCATION ===
     function getCountry($ip = null)
     {
-        global $_SERVER, $RxAPIVersion;
+        global $_SERVER, $RxAPIVersion, $__ROOT__;
 		
-		if ( is_null( $ip ) ) {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}
+        if ( is_null( $ip ) ) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
 
         $whois = new Whois();
         $ip = $_SERVER['REMOTE_ADDR'];
         $data = $whois->Lookup($ip);
         
-        if(!isset( $data['regrinfo'] )) return "unknown";
-        if(!isset( $data['regrinfo']['network'] )) return "unknown";
-        if(!isset( $data['regrinfo']['network']['country'] )) return "unknown";
+        $found = true;
+        
+        $country = "";
 
-	    $country = explode("#", $data['regrinfo']['network']['country'])[0];
+        if (is_file($__ROOT__."/geoip/GeoLite2-Country.mmdb"))
+        {
+        	$reader = new Reader($__ROOT__."/geoip/GeoLite2-Country.mmdb");
+        	$record = $reader->country($ip);
+        	$country = $record->country->isoCode;
+        }
+        else if (isset( $data['regrinfo'] ) && isset( $data['regrinfo']['network'] ) && isset( $data['regrinfo']['network']['country'] ))
+        {
+        	$country = explode("#", $data['regrinfo']['network']['country'])[0];
+		    $country = strtoupper(trim($country));
+        }
+	
         return trim($country);
     }
 ?>
