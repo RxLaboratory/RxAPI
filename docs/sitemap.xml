@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>http://rxapi.rxlab.io/index.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/install.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/api.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/quote.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/shields.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/changelog.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/gnu-gpl.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rxapi.rxlab.io/doc-license.html</loc>
-     <lastmod>2022-08-24</lastmod>
+     <lastmod>2022-08-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

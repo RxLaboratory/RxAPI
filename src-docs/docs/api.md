@@ -136,6 +136,10 @@ Endpoint: `http://api.rxlab.io`
     "languages": [
         {"name":"English","code":"en","count":800,"ratio":80},
         {"name":"Français","code":"fr","count":200,"ratio":20}
+    ],
+    "countries": [
+        {"name":"US","count":800,"ratio":80},
+        {"name":"FR","count":200,"ratio":20}
     ]
 }
 ```

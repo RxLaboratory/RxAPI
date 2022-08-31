@@ -1,5 +1,9 @@
 # RxAPI Changelog
 
+## ▹ 1.4.0
+
+- Get country info in stats
+
 ## ▹ 1.3.0
 
 - Fixed a few caching bugs

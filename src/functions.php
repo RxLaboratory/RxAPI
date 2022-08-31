@@ -690,7 +690,6 @@
 		}
 
         $whois = new Whois();
-        $whois->deep_whois = false;
         $ip = $_SERVER['REMOTE_ADDR'];
         $data = $whois->Lookup($ip);
         
