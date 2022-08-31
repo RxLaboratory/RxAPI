@@ -2,7 +2,8 @@
     require_once($__ROOT__."/config.php");
     require_once($__ROOT__."/reply.php");
     require_once($__ROOT__."/whois/whois.main.php");
-    require($__ROOT__."/geoip2.phar");
+    require($__ROOT__."/geoip/geoip2.phar");
+    use GeoIp2\Database\Reader;
 
     // language codes / language names associative array
     // Generated from https://github.com/unicode-org/cldr
@@ -606,7 +607,7 @@
 
                 $countryName = strtoupper($v['country']);
 
-                if ($countryName != "unknown" && $countryName != "") {
+                if ($countryName != "UNKNOWN" && $countryName != "") {
                     $countryCount++;
                     if (!isset($countries[$countryName]))
                     {
@@ -618,7 +619,7 @@
                     }
                     else
                     {
-                        $country['count']++;
+                        $countries[$countryName]['count']++;
                     }
                 }
             }
@@ -636,7 +637,7 @@
 
             $allLanguages = array();
             foreach($languages as $language) {
-                $language['ratio'] = round($language['count'] / $languageCount * 100);
+                $language['ratio'] = round($language['count'] / $languageCount * 1000)/10;
                 $allLanguages[] = $language;
             }
 
@@ -686,9 +687,9 @@
     {
         global $_SERVER, $RxAPIVersion, $__ROOT__;
 		
-        if ( is_null( $ip ) ) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
+	if ( is_null( $ip ) ) {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
 
         $whois = new Whois();
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -698,7 +699,7 @@
         
         $country = "";
 
-        if (is_file($__ROOT__."/geoip/GeoLite2-Country.mmdb"))
+	if (is_file($__ROOT__."/geoip/GeoLite2-Country.mmdb"))
         {
         	$reader = new Reader($__ROOT__."/geoip/GeoLite2-Country.mmdb");
         	$record = $reader->country($ip);
@@ -707,8 +708,9 @@
         else if (isset( $data['regrinfo'] ) && isset( $data['regrinfo']['network'] ) && isset( $data['regrinfo']['network']['country'] ))
         {
         	$country = explode("#", $data['regrinfo']['network']['country'])[0];
-		    $country = strtoupper(trim($country));
+		$country = strtoupper(trim($country));
         }
+        
 	
         return trim($country);
     }
