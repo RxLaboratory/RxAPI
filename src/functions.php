@@ -402,7 +402,7 @@
         $income = 0;
         $has_more = true;
         $prevId = "";
-        $monthStart = strtotime("first day of");
+        $monthStart = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
         while($has_more)
         {
             $data = "limit=100&created[gte]={$monthStart}";
@@ -502,8 +502,8 @@
         global $wcProducts;
         if ($wcToken != "" && $wcUsername != "") {
             // Get current month
-            $d = new DateTime('first day of this month');
-            $d = urlencode( $d->format('Y-m-d\TH:i:s') );
+            $d = date("Y-m-d\TH:i:s", mktime(0, 0, 0, date("m")-1, date("d"), date("Y")));
+            $d = urlencode( $d );
             $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100" );
             $wc = json_decode($wc, true);
             $wcCount = 0;
