@@ -132,65 +132,13 @@
             $ghToolUser = $ghUser;
             $ghRepo = $name;
 
-            // Check if we've data in the DB to override defaults
-            // Get the info
-            $rep = $db->prepare( "SELECT
-                    {$appsTable}.`id`,
-                    {$appsTable}.`ghUser`,
-                    {$appsTable}.`ghRepo`
-                FROM {$appsTable}
-                WHERE {$appsTable}.`name` = :name;"
-                );
-            $rep->bindValue(':name', $name, PDO::PARAM_STR);
-            $ok = sqlRequest( $rep, "Successful request." );
-            if ($ok)
+            $release = ghRelease($ghToolUser, $ghRepo, $prerelease);
+
+            if ($release)
             {
-                if ($v = $rep->fetch()) {
-                    if($v['ghUser']) $ghToolUser = $v['ghUser'];
-                    if($v['ghRepo']) $ghRepo = $v['ghRepo'];
-                }
-                $rep->closeCursor();
+                ghGetReleaseReply($release, $version);
             }
-
-            // Get update info from Github
-            $query = <<<JSON
-            {
-                repository(owner: "$ghToolUser", name: "$ghRepo") {
-                    releases(first: 50, orderBy: {field: CREATED_AT, direction: DESC}) {
-                        nodes {
-                            publishedAt,
-                            tagName,
-                            description,
-                            isPrerelease,
-                            name
-                        }
-                    }
-                }
-            }
-            JSON;
-            $variables = '';
-            $query = json_encode(['query' => $query, 'variables' => $variables]);
-
-            $gh = ghGraphQL( $query );
-            $gh = json_decode($gh, true);
-
-            $releases = $gh['data']['repository']['releases']['nodes'];
-
-            foreach($releases as $release) {
-                if ($prerelease || !$release['isPrerelease']) {
-                    
-                    ghGetReleaseReply($release, $version);
-                    $found = true;
-                    break;
-                }
-            }
-            // If not found and not prerelease, pick the latest prerelease anyway
-            if (!$found && count($releases) > 0) {
-                ghGetReleaseReply($releases[0], $version);
-                $found = true;
-            }
-
-            if (!$found)
+            else
             {
                 $reply['success'] = false;
                 $reply['message'] = "It seems this is an unknown software or no public version has been published yet.";

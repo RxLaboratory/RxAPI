@@ -1,6 +1,6 @@
 <?php
     /*
-        RxVersion
+        RxAPI
         
         This program is licensed under the GNU General Public License.
 
@@ -32,7 +32,7 @@
     require_once ("reply.php");
 
     //connect to database
-    include('db.php');
+    require_once('db.php');
 
     if ($installed)
     {

@@ -2,6 +2,8 @@
     require_once($__ROOT__."/config.php");
     require_once($__ROOT__."/reply.php");
     require_once($__ROOT__."/whois/whois.main.php");
+    require_once($__ROOT__."/db.php");
+    require_once ($__ROOT__."/init.php");
     require($__ROOT__."/geoip/geoip2.phar");
     use GeoIp2\Database\Reader;
 
@@ -282,6 +284,66 @@
         saveCache("ghIncome", $fund);
 
         return $fund;
+    }
+
+    function ghRelease($ghToolUser, $ghRepo, $prerelease=false) {
+        global $db, $appsTable;
+
+        // Check if we have the data in the DB to override defaults
+        // Get the info
+        $rep = $db->prepare( "SELECT
+                {$appsTable}.`id`,
+                {$appsTable}.`ghUser`,
+                {$appsTable}.`ghRepo`
+            FROM {$appsTable}
+            WHERE {$appsTable}.`name` = :name;"
+            );
+        $rep->bindValue(':name', $ghRepo, PDO::PARAM_STR);
+        $ok = sqlRequest( $rep, "Successful request." );
+        if ($ok)
+        {
+            if ($v = $rep->fetch()) {
+                if($v['ghUser']) $ghToolUser = $v['ghUser'];
+                if($v['ghRepo']) $ghRepo = $v['ghRepo'];
+            }
+            $rep->closeCursor();
+        }
+
+        // Get update info from Github
+        $query = <<<JSON
+        {
+            repository(owner: "$ghToolUser", name: "$ghRepo") {
+                releases(first: 50, orderBy: {field: CREATED_AT, direction: DESC}) {
+                    nodes {
+                        publishedAt,
+                        tagName,
+                        description,
+                        isPrerelease,
+                        name
+                    }
+                }
+            }
+        }
+        JSON;
+        $variables = '';
+        $query = json_encode(['query' => $query, 'variables' => $variables]);
+
+        $gh = ghGraphQL( $query );
+        $gh = json_decode($gh, true);
+
+        $releases = $gh['data']['repository']['releases']['nodes'];
+
+        foreach($releases as $release) {
+            if ($prerelease || !$release['isPrerelease']) {
+                return $release;
+            }
+        }
+        // If not found and not prerelease, pick the latest prerelease anyway
+        if (count($releases) > 0) {
+            return $releases[0];
+        }
+
+        return null;
     }
 
     // === PATREON ===
