@@ -105,7 +105,6 @@
         else if ($userRatio < 50) $color = "warning";
         else if ($userRatio < 75) $color = "info";
         else $color = "ok";
-
         badge("Supporters", "{$sponsors} ({$userRatio} %)", $color, "users");
         die();
     }
@@ -168,6 +167,70 @@
         badge($label, $release['tagName'], $color, $icon, true);
         die();
 
+    }
+
+    if (hasArg( "contributors") ) {
+        $tok = getArg("token", "");
+        if ($tok !== $apiToken) {
+            badge("Unauthorized", "><", "danger");
+            die();
+        }
+
+        $ghUser = getArg("ghUser", $ghUser);
+        $ghRepo = getArg("ghRepo");
+
+        if ($ghRepo == "") {
+            badge("No tool", ":'(", "danger", null, true);
+            die();
+        }
+
+        $contributors = ghContributors($ghUser, $ghRepo);
+
+        if ($contributors < 0) {
+            badge("Unknown tool", ":'(", "neutral", null, true);
+            die();
+        }
+
+        $color = 'neutral';
+        if ($contributors < 5) $color='danger';
+        else if ($contributors < 15) $color='warning';
+        else if ($contributors < 30) $color='info';
+        else $color='ok';
+
+        badge("Contributors", strval($contributors), $color, 'users', true);
+        die();
+    }
+
+    if (hasArg( "issuesCount") ) {
+        $tok = getArg("token", "");
+        if ($tok !== $apiToken) {
+            badge("Unauthorized", "><", "danger");
+            die();
+        }
+
+        $ghUser = getArg("ghUser", $ghUser);
+        $ghRepo = getArg("ghRepo");
+
+        if ($ghRepo == "") {
+            badge("No tool", ":'(", "danger", null, true);
+            die();
+        }
+
+        $issues = ghIssuesCount($ghUser, $ghRepo);
+
+        if ($issues < 0) {
+            badge("Unknown tool", ":'(", "neutral", null, true);
+            die();
+        }
+
+        $color = 'neutral';
+        if ($issues > 40) $color='danger';
+        else if ($issues > 20) $color='warning';
+        else if ($issues > 10) $color='info';
+        else $color='ok';
+
+        badge("Open tickets", strval($issues), $color, 'issue', true);
+        die();
     }
 
     badge("Invalid request", ":'(");

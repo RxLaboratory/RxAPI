@@ -48,9 +48,9 @@
 
         // image
         if ($small)
-            $image = new SVG(182,18);
+            $image = new SVG(202,18);
         else
-            $image = new SVG(222,28);
+            $image = new SVG(242,28);
         
         $doc = $image->getDocument();
 
@@ -77,9 +77,9 @@
         }
 
         if ($small)
-            $valueRect = new SVGRect(102, 0, 80, 18);
+            $valueRect = new SVGRect(102, 0, 100, 18);
         else
-            $valueRect = new SVGRect(122, 0, 100, 28);
+            $valueRect = new SVGRect(122, 0, 120, 28);
         
         $valueRect->setStyle('fill', $col);
         $bg->addChild($valueRect);
@@ -106,7 +106,7 @@
             $iconGroup->addChild( $iconSVG );
             if ($small) $iconGroup->setAttribute('transform', "translate(5, 2) scale({$scale})");
             else $iconGroup->setAttribute('transform', "translate(10, 4) scale({$scale})");
-            $fg->addChild($iconGroup);
+            //$fg->addChild($iconGroup);
         }
 
         // label
@@ -123,8 +123,8 @@
         $fg->addChild($label);
 
         // value
-        if ($small) $x = $x + 80;
-        else $x = $x + 100;
+        if ($small) $x = $x + 90;
+        else $x = $x + 110;
         $val = new SVGText($valueTxt, $x, $y);
         $val->setStyle('text-anchor', 'middle');
         $val->setStyle('fill', '#fff');
@@ -132,6 +132,6 @@
         $fg->addChild($val);
 
         header('Content-Type: image/svg+xml');
-        echo $image;
+        echo ( $image );
     }
 ?>
