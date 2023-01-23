@@ -101,9 +101,9 @@
         $numUsers = $stats["userCount"] / 30 + 8000;
         $userRatio = round( $sponsors / $numUsers * 100 );
 
-        if ($userRatio < 25) $color = "danger";
-        else if ($userRatio < 50) $color = "warning";
-        else if ($userRatio < 75) $color = "info";
+        if ($userRatio < 5) $color = "danger";
+        else if ($userRatio < 10) $color = "warning";
+        else if ($userRatio < 15) $color = "info";
         else $color = "ok";
         badge("Supporters", "{$sponsors} ({$userRatio} %)", $color, "users");
         die();
@@ -129,7 +129,7 @@
             if ($ratio < 25) $color = "danger";
             else if ($ratio < 50) $color = "warning";
             else if ($ratio < 75) $color = "info";
-            else $ratio = "ok";
+            else $color = "ok";
 
             badge("Monthly fund", "\${$fund} ({$ratio} %)", $color, "money");
         die();

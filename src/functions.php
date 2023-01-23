@@ -573,24 +573,30 @@
             $d = new DateTime();
             $d->sub(new DateInterval('P1M'));
             $d = urlencode( $d->format('Y-m-d\TH:i:s') );
-            $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100" );
-            $wc = json_decode($wc, true);
+            $page = 1;
             $wcCount = 0;
-            foreach ($wc as $order) {
-                // Check the product
-                if (count($wcProducts) > 0) {
-                    foreach( $order["line_items"] as $item ) {
-                        if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
-                        if (in_array($item["product_id"], $wcProducts)) {
-                            $wcCount++;
-                            break;
+            while(true) {
+                $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100&page={$page}" );
+                $wc = json_decode($wc, true);
+                if (!$wc) break;
+                if (count($wc) == 0) break;
+                foreach ($wc as $order) {
+                    // Check the product
+                    if (count($wcProducts) > 0) {
+                        foreach( $order["line_items"] as $item ) {
+                            if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
+                            if (in_array($item["product_id"], $wcProducts)) {
+                                $wcCount++;
+                                break;
+                            }
                         }
                     }
+                    // add whole order
+                    else {
+                        $wcCount++;
+                    }
                 }
-                // add whole order
-                else {
-                    $wcCount++;
-                }
+                $page += 1;
             }
 
             saveCache("wcBackers", $wcCount);
@@ -612,18 +618,24 @@
             $d = new DateTime();
             $d->sub(new DateInterval('P1M'));
             $d = urlencode( $d->format('Y-m-d\TH:i:s') );
-            $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100" );
-            $wc = json_decode($wc, true);
+            $page = 1;
             $wcCount = 0;
-            if (gettype($wc) == 'array')
+            while(true) {
+                $wc = wcRequest( "https://rxlaboratory.org/wp-json/wc/v3/orders?after={$d}&per_page=100&page={$page}" );
+                $wc = json_decode($wc, true);
+                if (gettype($wc) != 'array') break;
+                if (count($wc) == 0) break;
                 foreach ($wc as $order) {
                     if($order["status"] != "processing" && $order["status"] != "completed" ) continue;
+                    // Order is 0
+                    if ((int)$order["total"] == 0) continue;
+                    // sub the discount
+                    $wcCount -= (int)$order["discount_total"];
                     // Check the product
                     if (count($wcProducts) > 0) {
                         foreach( $order["line_items"] as $item ) {
                             if (in_array($item["product_id"], $wcProducts)) {
-                                $wcCount += (int)$item["subtotal"];
-                                break;
+                                $wcCount += (int)$item["subtotal"] - (int)$item["subtotal_tax"];
                             }
                         }
                     }
@@ -632,7 +644,9 @@
                         $wcCount += $wc["total"];
                     }
                 }
-
+                $page += 1;
+            }
+            
             saveCache("wcIncome", $wcCount);
             return $wcCount;
         }
